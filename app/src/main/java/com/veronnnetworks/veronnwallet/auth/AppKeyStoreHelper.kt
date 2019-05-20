@@ -14,23 +14,26 @@ import org.spongycastle.asn1.pkcs.Attribute
 import org.spongycastle.asn1.pkcs.CertificationRequest
 import org.spongycastle.asn1.pkcs.CertificationRequestInfo
 import org.spongycastle.asn1.pkcs.PKCSObjectIdentifiers
+import org.spongycastle.asn1.sec.SECNamedCurves
 import org.spongycastle.asn1.sec.SECObjectIdentifiers
 import org.spongycastle.asn1.x500.X500Name
 import org.spongycastle.asn1.x500.X500NameBuilder
 import org.spongycastle.asn1.x500.style.BCStyle
 import org.spongycastle.asn1.x509.AlgorithmIdentifier
-import org.spongycastle.crypto.util.PublicKeyFactory
-import org.spongycastle.crypto.util.SubjectPublicKeyInfoFactory
+import org.spongycastle.asn1.x509.SubjectPublicKeyInfo
+import org.spongycastle.crypto.generators.ECKeyPairGenerator
+import org.spongycastle.crypto.params.ECDomainParameters
+import org.spongycastle.crypto.params.ECKeyGenerationParameters
+import org.spongycastle.crypto.params.ECPrivateKeyParameters
+import org.spongycastle.crypto.params.ECPublicKeyParameters
+import org.spongycastle.jce.ECNamedCurveTable
 import org.spongycastle.jce.provider.BouncyCastleProvider
-import java.security.KeyPairGenerator
-import java.security.KeyStore
-import java.security.SecureRandom
-import java.security.Security
+import org.spongycastle.jce.spec.ECPrivateKeySpec
+import org.spongycastle.jce.spec.ECPublicKeySpec
+import org.spongycastle.util.encoders.Hex
+import java.math.BigInteger
+import java.security.*
 import java.security.cert.X509Certificate
-import java.security.spec.ECGenParameterSpec
-import javax.crypto.Cipher
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 import javax.inject.Inject
 
 class AppKeyStoreHelper @Inject constructor(
@@ -45,19 +48,52 @@ class AppKeyStoreHelper @Inject constructor(
     override fun generateECKeyPair(): Completable {
         return Completable.fromAction {
             Security.insertProviderAt(BouncyCastleProvider(), 1)
-            with(
-                KeyPairGenerator.getInstance("ECDH", "SC")
-            ) {
-                val paramSpec = ECGenParameterSpec(CURVE_SECP256R1)
-                initialize(paramSpec)
+            with(ECKeyPairGenerator()) {
+                val x9ECParameters = SECNamedCurves.getByName(CURVE_SECP256R1)
+                val params = ECDomainParameters(
+                    x9ECParameters.curve,
+                    x9ECParameters.g,
+                    x9ECParameters.n,
+                    x9ECParameters.h
+                )
+                val keyGenParam = ECKeyGenerationParameters(params, SecureRandom())
+                init(keyGenParam)
                 generateKeyPair().apply {
-                    preferenceHelper.ecPublicKey = public.encoded
-                    preferenceHelper.ecSecretKey = private.encoded
+                    val privateKey = private as ECPrivateKeyParameters
+                    preferenceHelper.ecSecretKey = Hex.encode(privateKey.d.toByteArray())
+
+                    val publicKey = public as ECPublicKeyParameters
+                    preferenceHelper.ecPublicKey = Hex.encode(publicKey.q.getEncoded(false))
                     preferenceHelper.commonName =
-                        public.encoded.toSha256Hex().encodeToBase58String()
+                        Hex.encode(publicKey.q.getEncoded(false))
+                            .toSha256Hex()
+                            .encodeToBase58String()
                 }
             }
         }.subscribeOn(schedulerProvider.io())
+    }
+
+    private fun hexToPublicKey(hexPub: ByteArray?): PublicKey {
+        hexPub ?: throw IllegalArgumentException("Illegal public key format")
+
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
+        val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CURVE_SECP256R1)
+        val curve = ecParameterSpec.curve
+        val point = curve.decodePoint(Hex.decode(hexPub))
+
+        val pubKeySpec = ECPublicKeySpec(point, ecParameterSpec)
+        return KeyFactory.getInstance("ECDH", "SC").generatePublic(pubKeySpec)
+    }
+
+    private fun hexToPrivateKey(hexPrv: ByteArray?): PrivateKey {
+        hexPrv ?: throw IllegalArgumentException("Illegal public key format")
+
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
+        val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CURVE_SECP256R1)
+        val bigInt = BigInteger(String(hexPrv), 16)
+
+        val prvKeySpec = ECPrivateKeySpec(bigInt, ecParameterSpec)
+        return KeyFactory.getInstance("ECDH", "SC").generatePrivate(prvKeySpec)
     }
 
     override fun generateCSRPem(): Single<String> {
@@ -66,8 +102,8 @@ class AppKeyStoreHelper @Inject constructor(
                 .addRDN(BCStyle.CN, preferenceHelper.commonName)
                 .build()
 
-            val pubKeyParam = PublicKeyFactory.createKey(preferenceHelper.ecPublicKey)
-            val pubKeyInfo = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(pubKeyParam)
+            val pubKeyInfo =
+                SubjectPublicKeyInfo.getInstance(hexToPublicKey(preferenceHelper.ecPublicKey).encoded)
             val requestInfo = CertificationRequestInfo(x500Name, pubKeyInfo, null)
 
             val algorithmIdentifier = AlgorithmIdentifier(SECObjectIdentifiers.secp256r1)
