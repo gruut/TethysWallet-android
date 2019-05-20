@@ -104,6 +104,7 @@ dependencies {
 
     // crypto
     implementation "com.madgag.spongycastle:prov:$spongy_ver"
+    implementation "com.madgag.spongycastle:bcpkix-jdk15on:$spongy_ver"
 
     // grpc
     implementation "io.grpc:grpc-okhttp:$grpc_ver"

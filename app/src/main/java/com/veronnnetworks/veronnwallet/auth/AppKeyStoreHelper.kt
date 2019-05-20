@@ -140,17 +140,7 @@ class AppKeyStoreHelper @Inject constructor(
 
     override fun getEncryptedSecretKeyPem(password: String): Single<String> {
         return Single.fromCallable {
-            val salt = ByteArray(8)
-            SecureRandom().nextBytes(salt)
-
-            val pbeKeySpec = PBEKeySpec(password.toCharArray(), salt, 10000, 32 * 8)
-            val pbeKey =
-                SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(pbeKeySpec)
-
-            val cipher = Cipher.getInstance("AES/GCM/NoPadding").apply {
-                init(Cipher.ENCRYPT_MODE, pbeKey)
-            }
-            cipher.doFinal(preferenceHelper.ecSecretKey).toPemString(PemType.PRIVATE_KEY)
+            hexToPrivateKey(preferenceHelper.ecSecretKey).toPemString(password)
         }.subscribeOn(schedulerProvider.io())
     }
 }
