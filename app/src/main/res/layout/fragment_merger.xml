@@ -6,11 +6,17 @@
 
     <data>
 
-        <import type="com.veronnnetworks.veronnwallet.ui.common.databinding.InputRule" />
+        <variable
+            name="ipAddress"
+            type="String" />
 
         <variable
-            name="mergerInfo"
-            type="com.veronnnetworks.veronnwallet.model.MergerInfo" />
+            name="portNumber"
+            type="String" />
+
+        <variable
+            name="password"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +64,7 @@
                         android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@={mergerInfo.ip}" />
+                        android:text="@={ipAddress}" />
                 </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
 
@@ -81,7 +87,7 @@
                         android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@={mergerInfo.port}" />
+                        android:text="@={portNumber}" />
                 </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
                 <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
@@ -104,7 +110,8 @@
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="@={password}" />
                 </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
                 <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
@@ -125,8 +132,8 @@
                         android:layout_height="wrap_content"
                         android:ems="14"
                         android:hint="@string/retype_password"
-                        android:inputType="textPassword"
                         android:imeOptions="actionDone"
+                        android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>

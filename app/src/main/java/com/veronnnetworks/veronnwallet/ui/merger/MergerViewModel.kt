@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.veronnnetworks.veronnwallet.auth.KeyStoreHelper
 import com.veronnnetworks.veronnwallet.data.grpc.GrpcService
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgSetupMerger
-import com.veronnnetworks.veronnwallet.model.MergerInfo
 import com.veronnnetworks.veronnwallet.ui.Result
 import com.veronnnetworks.veronnwallet.ui.common.mapper.toResult
 import com.veronnnetworks.veronnwallet.utils.ext.map
@@ -18,7 +17,6 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.zipWith
 import timber.log.Timber
-import java.io.InvalidObjectException
 import javax.inject.Inject
 
 class MergerViewModel @Inject constructor(
@@ -34,18 +32,13 @@ class MergerViewModel @Inject constructor(
         reply.map { it.inProgress }
     }
 
-    fun sendUserInfo(mergerInfo: MergerInfo) {
+    fun sendUserInfo(ip: String?, port: Int?, password: String?) {
         keyStoreHelper.getCertificatePem()
-            .zipWith(keyStoreHelper.getEncryptedSecretKeyPem("test")) { cert: String, sk: String? ->
+            .zipWith(keyStoreHelper.getEncryptedSecretKeyPem(password!!)) { cert: String, sk: String? ->
                 sk?.let { MsgSetupMerger(it, cert) }
             }
             .flatMap { msg: MsgSetupMerger ->
-                if (!mergerInfo.validate()) throw InvalidObjectException("Invalid inputs")
-                GrpcService(
-                    mergerInfo.ip!!,
-                    mergerInfo.port!!.toInt(),
-                    schedulerProvider
-                ).userService(msg)
+                GrpcService(ip!!, port!!, schedulerProvider).userService(msg)
             }
             .toResult(schedulerProvider)
             .subscribeBy(

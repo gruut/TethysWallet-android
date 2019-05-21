@@ -117,7 +117,13 @@ class MergerFragment : BaseFragment() {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
-                    onComplete = { mergerViewModel.sendUserInfo(binding.mergerInfo!!) },
+                    onComplete = {
+                        mergerViewModel.sendUserInfo(
+                            binding.ipAddress,
+                            binding.portNumber?.toIntOrNull(),
+                            binding.password
+                        )
+                    },
                     onError = {
                         Toast.makeText(
                             activity,
