@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_ip_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -47,8 +47,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    app:errorText="@{@string/invalid_ip}"
-                    app:setRule="@{mergerInfo.ipValidator}">
+                    app:trigger="focus_changed">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merger_ip"
@@ -60,10 +59,10 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="@={mergerInfo.ip}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_port_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -71,8 +70,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    app:errorText="@{@string/invalid_port}"
-                    app:setRule="@{mergerInfo.portValidator}">
+                    app:trigger="focus_changed">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merger_port"
@@ -84,9 +82,9 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="@={mergerInfo.port}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_password_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -95,9 +93,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     app:counterEnabled="true"
-                    app:errorText="@{@string/invalid_password}"
                     app:passwordToggleEnabled="true"
-                    app:setRule="@{InputRule.PASSWORD_RULE}">
+                    app:trigger="focus_changed">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merger_password"
@@ -108,9 +105,9 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_password_check_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -119,7 +116,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     app:counterEnabled="true"
-                    app:passwordToggleEnabled="true">
+                    app:passwordToggleEnabled="true"
+                    app:trigger="focus_changed">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merger_password_check"
@@ -128,9 +126,10 @@
                         android:ems="14"
                         android:hint="@string/retype_password"
                         android:inputType="textPassword"
+                        android:imeOptions="actionDone"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -141,7 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

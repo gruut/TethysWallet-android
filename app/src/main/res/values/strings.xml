@@ -21,9 +21,15 @@
     <string name="invalid_name">Invalid Name</string>
     <string name="invalid_mobile">Invalid Mobile Number</string>
     <string name="invalid_birth_date">Invalid Birth Date</string>
-    <string name="invalid_ip">Invalid IP Address</string>
     <string name="invalid_port">Invalid Port</string>
     <string name="invalid_password">Use at least 14 characters</string>
+
+    <string name="validation_error_occurred">Input error occurred</string>
+    <string name="validation_err_required">Required</string>
+    <string name="validation_err_number_only">Input only number</string>
+    <string name="validation_err_ip">Invalid IP Address</string>
+    <string name="validation_err_minimum">Use at least %d characters</string>
+    <string name="validation_err_not_matched">It must be same with previous input</string>
 
     <string name="nav_item_merger">Merger Setup</string>
     <string name="nav_item_home">Home</string>
