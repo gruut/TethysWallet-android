@@ -11,11 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.veronnnetworks.veronnwallet.R
 import com.veronnnetworks.veronnwallet.databinding.FragmentMergerBinding
-import com.veronnnetworks.veronnwallet.model.MergerInfo
 import com.veronnnetworks.veronnwallet.ui.NavigationController
 import com.veronnnetworks.veronnwallet.ui.common.fragment.BaseFragment
 import com.veronnnetworks.veronnwallet.ui.common.view.ValidatableView
 import com.veronnnetworks.veronnwallet.ui.common.view.validators.*
+import com.veronnnetworks.veronnwallet.utils.ProgressTimeLatch
+import com.veronnnetworks.veronnwallet.utils.ext.observe
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -48,9 +49,15 @@ class MergerFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val progressTimeLatch = ProgressTimeLatch {
+            binding.progress.visibility = if (it) View.VISIBLE else View.GONE
+        }
 
         initValidators()
-        binding.mergerInfo = MergerInfo()
+
+        mergerViewModel.isLoading.observe(this) { isLoading ->
+            progressTimeLatch.loading = isLoading ?: false
+        }
         binding.container.setOnClickListener { hideKeyboard() }
         binding.ok.setOnClickListener(this::onOkClick)
         binding.mergerPasswordCheck.setOnEditorActionListener { _, actionId, _ ->
