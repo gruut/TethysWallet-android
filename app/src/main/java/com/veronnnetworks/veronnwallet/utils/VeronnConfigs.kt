@@ -3,6 +3,8 @@ package com.veronnnetworks.veronnwallet.utils
 object VeronnConfigs {
     const val IDENTIFIER: Byte = 'P'.toByte()
     const val MSG_VERSION: Byte = 0x01
+    const val TEST_WORLD_ID = "GRUUTNET"
+    const val TEST_CHAIN_ID = "TSTCHAIN"
 
     const val IDENTIFIER_LENGTH: Int = 1
     const val VERSION_LENGTH: Int = 1

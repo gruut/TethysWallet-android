@@ -6,6 +6,8 @@ import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.IDENTIFIER
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.MSG_LENGTH_SIZE
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.MSG_VERSION
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.SENDER_ID_TYPE_SIZE
+import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.TEST_CHAIN_ID
+import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.TEST_WORLD_ID
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.WORLD_ID_TYPE_SIZE
 import com.veronnnetworks.veronnwallet.utils.ext.decodeBase58
 import com.veronnnetworks.veronnwallet.utils.ext.encodeToBase58String
@@ -19,8 +21,8 @@ class MsgHeader(
     var serializationType: TypeSerialization = TypeSerialization.NONE,
     private var dummy: Byte = 0x00,
     var totalLength: Int = 0,
-    var worldId: String? = null,
-    var chainId: String? = null,
+    var worldId: String? = TEST_WORLD_ID,
+    var chainId: String? = TEST_CHAIN_ID,
     var sender: String? = null
 ) {
     constructor(byteArray: ByteArray) : this() {
@@ -54,9 +56,9 @@ class MsgHeader(
             .put(serializationType.type)
             .put(dummy)
             .putInt(totalLength)
-            .put(worldId?.toByteArray(Charsets.UTF_8))
-            .put(chainId?.toByteArray(Charsets.UTF_8))
-            .put(sender?.decodeBase58())
+            .put(worldId?.toByteArray(Charsets.UTF_8) ?: ByteArray(WORLD_ID_TYPE_SIZE))
+            .put(chainId?.toByteArray(Charsets.UTF_8) ?: ByteArray(CHAIN_ID_TYPE_SIZE))
+            .put(sender?.decodeBase58() ?: ByteArray(SENDER_ID_TYPE_SIZE))
 
         return buffer.array()
     }
