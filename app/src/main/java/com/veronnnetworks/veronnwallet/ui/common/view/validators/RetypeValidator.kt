@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 
 /**
- * Validation error when the text length is shorter
+ * Validation error when the text is not equal to previous text
  */
 class RetypeValidator(
     private val errorMessage: String,

@@ -17,7 +17,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
-import java.io.InvalidObjectException
 import javax.inject.Inject
 
 class JoinViewModel @Inject constructor(
@@ -56,7 +55,6 @@ class JoinViewModel @Inject constructor(
     fun getCertificate(userInfo: UserInfo) {
         keyStoreHelper.generateCSRPem()
             .flatMapPublisher { csr: String ->
-                if (!userInfo.validate()) throw InvalidObjectException("Invalid inputs")
                 gaRepository.signUp(userInfo.mobile!!, csr)
             }
             .flatMapSingle { response: SignUpResponse ->

@@ -4,7 +4,6 @@
 
     <data>
 
-        <import type="com.veronnnetworks.veronnwallet.ui.common.databinding.InputRule" />
         <variable
             name="userInfo"
             type="com.veronnnetworks.veronnwallet.model.UserInfo" />
@@ -19,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_name_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -27,8 +26,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                app:setRule="@{userInfo.nameValidator}"
-                app:errorText="@{@string/invalid_name}">
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_name"
@@ -38,9 +36,9 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@={userInfo.name}" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_birth_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -48,21 +46,20 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                app:setRule="@{userInfo.birthDateValidator}"
-                app:errorText="@{@string/invalid_birth_date}">
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/birth_date"
+                    android:inputType="date"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@={userInfo.birthDate}"
-                    android:inputType="date"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@={userInfo.birthDate}" />
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_mobile_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -70,19 +67,18 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                app:setRule="@{userInfo.mobileValidator}"
-                app:errorText="@{@string/invalid_mobile}">
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/mobile_number"
+                    android:inputType="phone"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@={userInfo.mobile}"
-                    android:inputType="phone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@={userInfo.mobile}" />
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -95,39 +91,39 @@
 
                 <RadioButton
                     android:id="@+id/user_sex_male"
-                    android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
                     android:padding="16dp"
                     android:text="@string/male" />
 
                 <RadioButton
                     android:id="@+id/user_sex_female"
-                    android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:padding="16dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:padding="16dp"
                     android:text="@string/female" />
 
                 <RadioButton
                     android:id="@+id/user_sex_others"
-                    android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:padding="16dp"
-                    android:button="@android:color/transparent"
                     android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:padding="16dp"
                     android:text="@string/others" />
             </RadioGroup>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_isc_type_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -135,7 +131,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_isc_type"
@@ -144,9 +141,9 @@
                     android:hint="@string/isc_type"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_isc_code_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -154,16 +151,17 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_isc_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/isc_code" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_location_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -171,7 +169,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                app:trigger="focus_changed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_location"
@@ -180,7 +179,7 @@
                     android:hint="@string/address"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
         </LinearLayout>
     </ScrollView>
 </layout>
