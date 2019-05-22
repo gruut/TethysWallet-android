@@ -33,13 +33,16 @@ class MergerViewModel @Inject constructor(
     }
 
     fun sendUserInfo(ip: String?, port: Int?, password: String?) {
+        val grpcService = GrpcService(ip!!, port!!, schedulerProvider)
+
         keyStoreHelper.getCertificatePem()
             .zipWith(keyStoreHelper.getEncryptedSecretKeyPem(password!!)) { cert: String, sk: String? ->
                 sk?.let { MsgSetupMerger(it, cert) }
             }
             .flatMap { msg: MsgSetupMerger ->
-                GrpcService(ip!!, port!!, schedulerProvider).userService(msg)
+                grpcService.userService(msg)
             }
+            .doFinally { grpcService.terminateChannel() }
             .toResult(schedulerProvider)
             .subscribeBy(
                 onError = { Timber.e(it) },

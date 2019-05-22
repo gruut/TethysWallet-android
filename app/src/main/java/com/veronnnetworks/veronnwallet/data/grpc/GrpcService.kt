@@ -1,11 +1,13 @@
 package com.veronnnetworks.veronnwallet.data.grpc
 
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgPacker
+import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.GRPC_TIMEOUT
 import com.veronnnetworks.veronnwallet.utils.rx.SchedulerProvider
 import com.veronnworks.veronnwallet.GruutUserServiceGrpc
 import com.veronnworks.veronnwallet.Reply
 import io.grpc.ManagedChannelBuilder
 import io.reactivex.Single
+import java.util.concurrent.TimeUnit
 
 class GrpcService constructor(
     ip: String,
@@ -17,7 +19,12 @@ class GrpcService constructor(
 
     fun userService(msg: MsgPacker): Single<Reply> {
         return Single.fromCallable {
-            stub.userService(msg.toGrpcMsg())
+            stub.withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.SECONDS)
+                .userService(msg.toGrpcMsg())
         }.subscribeOn(schedulerProvider.io())
+    }
+
+    fun terminateChannel() {
+        channel.shutdownNow()
     }
 }

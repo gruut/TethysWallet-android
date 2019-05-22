@@ -12,16 +12,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.veronnnetworks.veronnwallet.R
 import com.veronnnetworks.veronnwallet.databinding.FragmentMergerBinding
 import com.veronnnetworks.veronnwallet.ui.NavigationController
+import com.veronnnetworks.veronnwallet.ui.Result
 import com.veronnnetworks.veronnwallet.ui.common.fragment.BaseFragment
 import com.veronnnetworks.veronnwallet.ui.common.view.ValidatableView
 import com.veronnnetworks.veronnwallet.ui.common.view.validators.*
 import com.veronnnetworks.veronnwallet.utils.ProgressTimeLatch
 import com.veronnnetworks.veronnwallet.utils.ext.observe
+import com.veronnworks.veronnwallet.Reply
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 class MergerFragment : BaseFragment() {
@@ -58,6 +61,24 @@ class MergerFragment : BaseFragment() {
         mergerViewModel.isLoading.observe(this) { isLoading ->
             progressTimeLatch.loading = isLoading ?: false
         }
+        mergerViewModel.reply.observe(this) { result ->
+            when (result) {
+                is Result.Failure -> {
+                    Timber.e(result.e)
+                }
+                is Result.Success -> {
+                    when (result.data.status) {
+                        Reply.Status.SUCCESS -> {
+                            activity?.finish()
+                        }
+                        else -> {
+                            Timber.e("Error Message From Merger: ${result.data.status}")
+                        }
+                    }
+                }
+            }
+        }
+
         binding.container.setOnClickListener { hideKeyboard() }
         binding.ok.setOnClickListener(this::onOkClick)
         binding.mergerPasswordCheck.setOnEditorActionListener { _, actionId, _ ->
