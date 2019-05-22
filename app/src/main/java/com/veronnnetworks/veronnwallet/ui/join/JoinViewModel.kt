@@ -38,8 +38,8 @@ class JoinViewModel @Inject constructor(
         storeResult.map { it.inProgress }
     }
 
-    fun isAutonym(): Boolean {
-        return preferenceHelper.isAutonym
+    fun isKeyExist(): Boolean {
+        return !preferenceHelper.commonName.isNullOrEmpty()
     }
 
     fun generateECKeyPair() {

@@ -33,7 +33,7 @@ class JoinFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (joinViewModel.isAutonym()) {
+        if (joinViewModel.isKeyExist()) {
             navigationController.navigateToMainActivity()
         } else {
             joinViewModel.generateECKeyPair()
