@@ -6,28 +6,24 @@ import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class MsgChallenge constructor(
+class MsgAccept constructor(
     bytes: ByteArray
 ) : MsgUnpacker(bytes) {
     @Expose
     @SerializedName("time") // __TIMESTAMP__
     val time: Int
     @Expose
-    @SerializedName("user") // __BASE58_256__
-    val user: String
-    @Expose
     @SerializedName("merger") // __BASE58_256__
     val merger: String
     @Expose
-    @SerializedName("mn") // __BASE64_256__
-    val mergerNonce: String
+    @SerializedName("val") // __BOOLEAN__
+    val result: Boolean
 
     init {
-        val msg = byteArrayToJson() as MsgChallenge
+        val msg = byteArrayToJson() as MsgAccept
         this.time = msg.time
-        this.user = msg.user
         this.merger = msg.merger
-        this.mergerNonce = msg.mergerNonce
+        this.result = msg.result
     }
 
     override fun byteArrayToJson(): MsgUnpacker {
@@ -42,7 +38,7 @@ class MsgChallenge constructor(
             }
         }).create()
 
-        return gson.fromJson<MsgChallenge>(String(body), MsgChallenge::class.java)
+        return gson.fromJson<MsgAccept>(String(body), MsgAccept::class.java)
     }
 
     override fun checkSender(): Boolean = header.sender.equals(merger)

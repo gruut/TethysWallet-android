@@ -48,8 +48,7 @@ data class MsgJoin constructor(
                 return false
             }
         }).create()
-        val tmp = gson.toJson(this)
-        return tmp.toByteArray()
+        return gson.toJson(this).toByteArray()
     }
 
 }

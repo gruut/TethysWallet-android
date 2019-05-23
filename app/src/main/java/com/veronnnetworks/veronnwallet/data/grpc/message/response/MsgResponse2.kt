@@ -6,28 +6,46 @@ import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class MsgChallenge constructor(
+class MsgResponse2 constructor(
     bytes: ByteArray
 ) : MsgUnpacker(bytes) {
     @Expose
     @SerializedName("time") // __TIMESTAMP__
     val time: Int
     @Expose
-    @SerializedName("user") // __BASE58_256__
-    val user: String
+    @SerializedName("dh")
+    val dh: DHJson
     @Expose
-    @SerializedName("merger") // __BASE58_256__
-    val merger: String
-    @Expose
-    @SerializedName("mn") // __BASE64_256__
-    val mergerNonce: String
+    @SerializedName("merger")
+    val merger: MergerJson
+
+
+    data class DHJson constructor(
+        @Expose
+        @SerializedName("x") // __HEX_256__
+        val x: String,
+        @Expose
+        @SerializedName("y") // __HEX_256__
+        val y: String
+    )
+
+    data class MergerJson constructor(
+        @Expose
+        @SerializedName("id") // __BASE58_256__
+        val id: String,
+        @Expose
+        @SerializedName("cert") // __CERT_PEM__
+        val cert: String,
+        @Expose
+        @SerializedName("sig") // __BASE64_SIG__
+        val sig: String
+    )
 
     init {
-        val msg = byteArrayToJson() as MsgChallenge
+        val msg = byteArrayToJson() as MsgResponse2
         this.time = msg.time
-        this.user = msg.user
+        this.dh = msg.dh
         this.merger = msg.merger
-        this.mergerNonce = msg.mergerNonce
     }
 
     override fun byteArrayToJson(): MsgUnpacker {
@@ -42,8 +60,8 @@ class MsgChallenge constructor(
             }
         }).create()
 
-        return gson.fromJson<MsgChallenge>(String(body), MsgChallenge::class.java)
+        return gson.fromJson<MsgResponse2>(String(body), MsgResponse2::class.java)
     }
 
-    override fun checkSender(): Boolean = header.sender.equals(merger)
+    override fun checkSender(): Boolean = header.sender.equals(merger.id)
 }

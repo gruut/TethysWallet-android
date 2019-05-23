@@ -5,23 +5,29 @@ import com.google.gson.FieldAttributes
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMac
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMsg
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs
 
-data class MsgSetupMerger constructor(
+data class MsgSuccess constructor(
     @Expose
-    @SerializedName("enc_sk") // PKCS8 PEM
-    val encryptedSecretKey: String,
+    @SerializedName("time") // __TIMESTAMP__
+    val time: Int,
     @Expose
-    @SerializedName("cert") // x509 PEM
-    val certificate: String
+    @SerializedName("user") // __BASE58_256__
+    val user: String,
+    @Expose
+    @SerializedName("val") // __BOOLEAN__
+    val result: Boolean
 ) : MsgPacker() {
     init {
         setHeader()
     }
 
     override fun setHeader() {
-        this.header.msgType = TypeMsg.MSG_SETUP_MERGER
+        this.header.msgType = TypeMsg.MSG_SUCCESS
+        this.header.macType = TypeMac.HMAC
+        this.header.sender = user
         this.header.totalLength = VeronnConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
     }
 
