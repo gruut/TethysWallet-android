@@ -66,7 +66,7 @@ class AppKeyStoreHelper @Inject constructor(
                     preferenceHelper.ecPublicKey = Hex.encode(publicKey.q.getEncoded(false))
                     preferenceHelper.commonName =
                         Hex.encode(publicKey.q.getEncoded(false))
-                            .toSha256Hex()
+                            .toSha256()
                             .encodeToBase58String()
                 }
             }
