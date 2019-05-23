@@ -26,6 +26,7 @@ ext {
 
     junit_ver = '4.12'
     roboletric_ver = '4.2'
+    mockk_ver = '1.9.3'
     runner_ver = '1.1.1'
     espresso_ver = '3.1.1'
 }

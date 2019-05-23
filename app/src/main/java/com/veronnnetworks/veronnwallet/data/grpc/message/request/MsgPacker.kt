@@ -10,7 +10,7 @@ abstract class MsgPacker {
     lateinit var receiverId: String
 
     abstract fun setHeader()
-    abstract fun toJson(): ByteArray
+    abstract fun jsonToByteArray(): ByteArray
 
     fun ByteArray.serialize(): ByteArray {
         // TODO: Serialize data
@@ -20,7 +20,7 @@ abstract class MsgPacker {
     fun toByteArray(): ByteArray {
         val outputStream = ByteArrayOutputStream()
         outputStream.write(header.toByteArray())
-        outputStream.write(toJson().serialize())
+        outputStream.write(jsonToByteArray().serialize())
         // TODO: Add MAC
 
         return outputStream.toByteArray()

@@ -5,7 +5,7 @@ import com.veronnnetworks.veronnwallet.utils.ext.encodeToBase58String
 import com.veronnnetworks.veronnwallet.utils.ext.toSha256
 import org.junit.Test
 
-class MsgJoinTest {
+class MsgPackerTest {
     @Test
     fun parse() {
         val user = "user".toSha256()
@@ -18,7 +18,7 @@ class MsgJoinTest {
             merger.encodeToBase58String()
         )
 
-        val json = msg.toJson()
+        val json = msg.jsonToByteArray()
         val string = String(json)
     }
 }

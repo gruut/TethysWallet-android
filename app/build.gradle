@@ -115,6 +115,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_ver"
 
     testImplementation "org.robolectric:robolectric:$roboletric_ver"
+    testImplementation "io.mockk:mockk:$mockk_ver"
     testImplementation "junit:junit:$junit_ver"
 
     androidTestImplementation "androidx.test:runner:$runner_ver"

@@ -10,10 +10,10 @@ import com.veronnnetworks.veronnwallet.utils.VeronnConfigs
 
 data class MsgSetupMerger constructor(
     @Expose
-    @SerializedName("enc_sk")
+    @SerializedName("enc_sk") // PKCS8 PEM
     val encryptedSecretKey: String,
     @Expose
-    @SerializedName("cert")
+    @SerializedName("cert") // x509 PEM
     val certificate: String
 ) : MsgPacker() {
     init {
@@ -22,10 +22,10 @@ data class MsgSetupMerger constructor(
 
     override fun setHeader() {
         this.header.msgType = TypeMsg.MSG_SETUP_MERGER
-        this.header.totalLength = VeronnConfigs.HEADER_LENGTH + toJson().serialize().size
+        this.header.totalLength = VeronnConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
     }
 
-    override fun toJson(): ByteArray {
+    override fun jsonToByteArray(): ByteArray {
         // Superclass 제외하고 serialize
         val gson = GsonBuilder().addSerializationExclusionStrategy(object : ExclusionStrategy {
             override fun shouldSkipField(f: FieldAttributes): Boolean {
