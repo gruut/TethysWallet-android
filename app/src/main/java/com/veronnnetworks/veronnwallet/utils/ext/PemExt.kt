@@ -1,6 +1,5 @@
 package com.veronnnetworks.veronnwallet.utils.ext
 
-import android.util.Base64
 import org.spongycastle.openssl.PKCS8Generator
 import org.spongycastle.openssl.jcajce.JcaPKCS8Generator
 import org.spongycastle.openssl.jcajce.JceOpenSSLPKCS8EncryptorBuilder
@@ -54,12 +53,7 @@ fun String.toX509Cert(): X509Certificate? {
 
         val cf = CertificateFactory.getInstance("X509", "BC")
         return cf.generateCertificate(
-            ByteArrayInputStream(
-                Base64.decode(
-                    input,
-                    Base64.NO_WRAP
-                )
-            )
+            ByteArrayInputStream(input.fromBase64())
         ) as X509Certificate
     }
     return null

@@ -4,6 +4,7 @@ import com.veronnnetworks.veronnwallet.data.local.PreferenceHelper
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.ALIAS_VERONN
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.CURVE_SECP256R1
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+import com.veronnnetworks.veronnwallet.utils.CryptoConstants.SHA256withECDSA
 import com.veronnnetworks.veronnwallet.utils.ext.*
 import com.veronnnetworks.veronnwallet.utils.rx.SchedulerProvider
 import io.reactivex.Completable
@@ -26,14 +27,11 @@ import org.spongycastle.crypto.params.ECDomainParameters
 import org.spongycastle.crypto.params.ECKeyGenerationParameters
 import org.spongycastle.crypto.params.ECPrivateKeyParameters
 import org.spongycastle.crypto.params.ECPublicKeyParameters
-import org.spongycastle.jce.ECNamedCurveTable
 import org.spongycastle.jce.provider.BouncyCastleProvider
-import org.spongycastle.jce.spec.ECPrivateKeySpec
-import org.spongycastle.jce.spec.ECPublicKeySpec
 import org.spongycastle.util.encoders.Hex
-import java.math.BigInteger
 import java.security.*
 import java.security.cert.X509Certificate
+import javax.crypto.KeyAgreement
 import javax.inject.Inject
 
 class AppKeyStoreHelper @Inject constructor(
@@ -73,29 +71,6 @@ class AppKeyStoreHelper @Inject constructor(
         }.subscribeOn(schedulerProvider.io())
     }
 
-    private fun hexToPublicKey(hexPub: ByteArray?): PublicKey {
-        hexPub ?: throw IllegalArgumentException("Illegal public key format")
-
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
-        val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CURVE_SECP256R1)
-        val curve = ecParameterSpec.curve
-        val point = curve.decodePoint(Hex.decode(hexPub))
-
-        val pubKeySpec = ECPublicKeySpec(point, ecParameterSpec)
-        return KeyFactory.getInstance("ECDH", "SC").generatePublic(pubKeySpec)
-    }
-
-    private fun hexToPrivateKey(hexPrv: ByteArray?): PrivateKey {
-        hexPrv ?: throw IllegalArgumentException("Illegal public key format")
-
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
-        val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CURVE_SECP256R1)
-        val bigInt = BigInteger(String(hexPrv), 16)
-
-        val prvKeySpec = ECPrivateKeySpec(bigInt, ecParameterSpec)
-        return KeyFactory.getInstance("ECDH", "SC").generatePrivate(prvKeySpec)
-    }
-
     override fun generateCSRPem(): Single<String> {
         return Single.fromCallable {
             val x500Name = X500NameBuilder(X500Name.getDefaultStyle())
@@ -103,7 +78,7 @@ class AppKeyStoreHelper @Inject constructor(
                 .build()
 
             val pubKeyInfo =
-                SubjectPublicKeyInfo.getInstance(hexToPublicKey(preferenceHelper.ecPublicKey).encoded)
+                SubjectPublicKeyInfo.getInstance(preferenceHelper.ecPublicKey.hexToPublicKey().encoded)
             val requestInfo = CertificationRequestInfo(x500Name, pubKeyInfo, null)
 
             val algorithmIdentifier = AlgorithmIdentifier(SECObjectIdentifiers.secp256r1)
@@ -140,7 +115,38 @@ class AppKeyStoreHelper @Inject constructor(
 
     override fun getEncryptedSecretKeyPem(password: String): Single<String> {
         return Single.fromCallable {
-            hexToPrivateKey(preferenceHelper.ecSecretKey).toPemString(password)
+            preferenceHelper.ecSecretKey.hexToPrivateKey().toPemString(password)
         }.subscribeOn(schedulerProvider.io())
     }
+
+    override fun getSharedSecretKey(othersPubKey: PublicKey): Single<ByteArray> {
+        return Single.fromCallable {
+            val myPrvKey = preferenceHelper.ecSecretKey.hexToPrivateKey()
+            with(KeyAgreement.getInstance("ECDH", "SC")) {
+                init(myPrvKey)
+                doPhase(othersPubKey, true)
+                generateSecret().toSha256()
+            }
+        }.subscribeOn(schedulerProvider.io())
+    }
+
+    override fun signWithECKey(data: ByteArray): Single<String> =
+        Single.fromCallable {
+            val secretKey = preferenceHelper.ecSecretKey.hexToPrivateKey()
+            with(Signature.getInstance(SHA256withECDSA)) {
+                initSign(secretKey)
+                update(data)
+                sign().toBase64()
+            }
+        }
+
+    override fun verifyWithCert(data: ByteArray, signature: String, pem: String): Single<Boolean> =
+        Single.fromCallable {
+            val cert = pem.toX509Cert()
+            with(Signature.getInstance(SHA256withECDSA)) {
+                initVerify(cert)
+                update(data)
+                verify(signature.fromBase64())
+            }
+        }
 }

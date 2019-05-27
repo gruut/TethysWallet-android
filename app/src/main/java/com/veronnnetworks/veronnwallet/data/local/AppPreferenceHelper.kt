@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Base64
 import com.veronnnetworks.veronnwallet.auth.LocalKeyStoreHelper
 import com.veronnnetworks.veronnwallet.di.PreferenceInfo
+import com.veronnnetworks.veronnwallet.utils.ext.fromBase64
+import com.veronnnetworks.veronnwallet.utils.ext.toBase64
 import javax.inject.Inject
 
 class AppPreferenceHelper @Inject constructor(
@@ -22,20 +24,20 @@ class AppPreferenceHelper @Inject constructor(
         set(value) = prefs.edit().putString(PREF_KEY_COMMON_NAME, value).apply()
 
     override var ecPublicKey: ByteArray?
-        get() = prefs.getString(PREF_KEY_PK, null)?.let { Base64.decode(it, Base64.NO_WRAP) }
+        get() = prefs.getString(PREF_KEY_PK, null)?.let { it.fromBase64() }
         set(value) = prefs.edit().run {
             putString(
                 PREF_KEY_PK,
-                Base64.encodeToString(value, Base64.NO_WRAP)
+                value.toBase64()
             ).apply()
         }
 
     override var ecSecretKey: ByteArray?
         get() {
             return if (getSecurely(PREF_KEY_ENCRYPTED_SK, "").isEmpty()) null
-            else Base64.decode(getSecurely(PREF_KEY_ENCRYPTED_SK, ""), Base64.NO_WRAP)
+            else getSecurely(PREF_KEY_ENCRYPTED_SK, "").fromBase64()
         }
-        set(value) = putSecurely(PREF_KEY_ENCRYPTED_SK, Base64.encode(value, Base64.NO_WRAP))
+        set(value) = putSecurely(PREF_KEY_ENCRYPTED_SK, value.toBase64())
 
     override var isAutonym: Boolean
         get() = prefs.getBoolean(PREF_KEY_IS_AUTONYM, false)

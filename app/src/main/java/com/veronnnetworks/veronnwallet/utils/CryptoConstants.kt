@@ -6,4 +6,5 @@ object CryptoConstants {
     const val ALIAS_LOCAL = "LOCAL_KEY"
     const val ALIAS_SELF = "SELF_CERT"
     const val ALIAS_VERONN = "VERONN_AUTH"
+    const val SHA256withECDSA = "SHA256withECDSA"
 }

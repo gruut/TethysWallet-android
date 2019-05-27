@@ -2,9 +2,10 @@ package com.veronnnetworks.veronnwallet.auth
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.util.Base64
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.ALIAS_LOCAL
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+import com.veronnnetworks.veronnwallet.utils.ext.fromBase64
+import com.veronnnetworks.veronnwallet.utils.ext.toBase64
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.spec.RSAKeyGenParameterSpec
@@ -60,7 +61,7 @@ object LocalKeyStoreHelper {
             }
 
         val encryptedBytes = cipher.doFinal(plainText.toByteArray(Charsets.UTF_8))
-        return Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
+        return encryptedBytes.toBase64()
     }
 
     fun decrypt(base64EncodedCipherText: String): String {
@@ -69,7 +70,7 @@ object LocalKeyStoreHelper {
                 init(Cipher.DECRYPT_MODE, (keyEntry as KeyStore.PrivateKeyEntry).privateKey)
             }
 
-        val encryptedBytes = Base64.decode(base64EncodedCipherText, Base64.NO_WRAP)
+        val encryptedBytes = base64EncodedCipherText.fromBase64()
         val decryptedBytes = cipher.doFinal(encryptedBytes)
         return String(decryptedBytes)
     }
