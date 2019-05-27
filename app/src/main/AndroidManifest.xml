@@ -6,15 +6,19 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.veronnnetworks.veronnwallet.ui.BaseApp"
+        android:name=".ui.BaseApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".service.MergerService"
+            android:enabled="true" />
+
         <activity
-            android:name="com.veronnnetworks.veronnwallet.ui.merger.MergerActivity"
+            android:name=".ui.merger.MergerActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".ui.main.MainActivity">
             <meta-data
@@ -22,11 +26,11 @@
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
-            android:name="com.veronnnetworks.veronnwallet.ui.main.MainActivity"
-            android:launchMode="singleTop">
-        </activity>
+            android:name=".ui.main.MainActivity"
+            android:launchMode="singleTop" />
         <activity
-            android:name="com.veronnnetworks.veronnwallet.ui.join.JoinActivity"
+            android:name=".ui.join.JoinActivity"
+            android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,6 +4,7 @@ import android.app.Application
 import com.veronnnetworks.veronnwallet.di.builder.JoinActivityBuilder
 import com.veronnnetworks.veronnwallet.di.builder.MainActivityBuilder
 import com.veronnnetworks.veronnwallet.di.builder.MergerActivityBuilder
+import com.veronnnetworks.veronnwallet.di.builder.MergerServiceBuilder
 import com.veronnnetworks.veronnwallet.di.module.AppModule
 import com.veronnnetworks.veronnwallet.di.module.NetworkModule
 import com.veronnnetworks.veronnwallet.di.module.ViewModelModule
@@ -23,7 +24,8 @@ import javax.inject.Singleton
         ViewModelModule::class,
         JoinActivityBuilder::class,
         MainActivityBuilder::class,
-        MergerActivityBuilder::class
+        MergerActivityBuilder::class,
+        MergerServiceBuilder::class
     ]
 )
 interface AppComponent : AndroidInjector<BaseApp> {
