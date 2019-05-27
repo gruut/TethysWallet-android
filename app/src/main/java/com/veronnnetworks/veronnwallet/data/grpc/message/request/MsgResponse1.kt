@@ -13,8 +13,8 @@ data class MsgResponse1 constructor(
     @SerializedName("time") // __TIMESTAMP__
     val time: Int,
     @Expose
-    @SerializedName("sn") // __BASE64_256__
-    val siginerNonce: String,
+    @SerializedName("un") // __BASE64_256__
+    val userNonce: String,
     @Expose
     @SerializedName("dh")
     val dh: DHJson,
