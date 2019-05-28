@@ -1,7 +1,6 @@
 package com.veronnnetworks.veronnwallet.data.grpc
 
 import android.util.Base64
-import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgChallenge
 import com.veronnnetworks.veronnwallet.utils.ext.encodeToBase58String
 import com.veronnnetworks.veronnwallet.utils.ext.toSha256
 import io.mockk.mockkStatic
@@ -22,20 +21,20 @@ class MsgUnpackerTest {
 
     @Test
     fun parse() {
-        val user = "user".toSha256()
+        val user = "C8VQ4PGJBRRPVgAqtfNH866HETfBo4jyS1t3pM3QNhv3"
         val merger = "merger".toSha256()
         val nonce = ByteArray(32)
         SecureRandom().nextBytes(nonce)
 
         val msg = TestMsgChallenge(
             (System.currentTimeMillis() / 1000).toInt(),
-            user.encodeToBase58String(),
+            user,
             merger.encodeToBase58String(),
             Base64.encodeToString(nonce, Base64.NO_WRAP)
         )
 
         val target = MsgChallenge(msg.toByteArray())
-        assertEquals(target.user, user.encodeToBase58String())
+        assertEquals(target.user, user)
         assertEquals(target.merger, merger.encodeToBase58String())
         assertEquals(target.mergerNonce, Base64.encodeToString(nonce, Base64.NO_WRAP))
     }

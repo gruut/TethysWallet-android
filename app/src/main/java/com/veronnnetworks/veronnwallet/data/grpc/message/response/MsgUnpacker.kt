@@ -1,18 +1,18 @@
 package com.veronnnetworks.veronnwallet.data.grpc.message.response
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory
 import com.veronnnetworks.veronnwallet.data.grpc.message.MsgHeader
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMac
+import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMsg
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeSerialization
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.HEADER_LENGTH
 
-abstract class MsgUnpacker(
+class MsgUnpacker(
     bytes: ByteArray
 ) {
-    abstract fun byteArrayToJson(): MsgUnpacker
-    abstract fun checkSender(): Boolean
-
     val header: MsgHeader
-    val body: ByteArray
+    val body: MsgBody?
     val mac: ByteArray
 
     init {
@@ -26,10 +26,15 @@ abstract class MsgUnpacker(
         mac = bytes.copyOfRange(offset, bytes.size)
     }
 
-    fun ByteArray.deserialize(): ByteArray = when (header.serializationType) {
-        // TODO: Deserialize data
-        TypeSerialization.NONE -> this
-        else -> this
+    private fun getMapper(): ObjectMapper = when (header.serializationType) {
+        TypeSerialization.CBOR -> ObjectMapper(CBORFactory())
+        TypeSerialization.NONE -> ObjectMapper()
+        else -> ObjectMapper()
+    }
+
+    private fun ByteArray.deserialize(): MsgBody? = when (header.msgType) {
+        TypeMsg.MSG_CHALLENGE -> getMapper().readValue(this, MsgChallenge::class.java)
+        else -> null
     }
 
     fun checkMac(): Boolean = when (header.macType) {
@@ -38,4 +43,9 @@ abstract class MsgUnpacker(
         else -> true
     }
 
+    fun checkSender(): Boolean = header.sender.equals(body?.merger)
+
+    override fun toString(): String {
+        return header.toString() + "\n" + body.toString()
+    }
 }

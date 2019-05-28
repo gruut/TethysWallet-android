@@ -1,28 +1,20 @@
 package com.veronnnetworks.veronnwallet.data.grpc.message.request
 
-import com.google.gson.ExclusionStrategy
-import com.google.gson.FieldAttributes
-import com.google.gson.GsonBuilder
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMsg
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs
 
 data class MsgJoin constructor(
-    @Expose
-    @SerializedName("time") // __TIMESTAMP__
+    @JsonProperty("time") // __TIMESTAMP__
     val time: Int,
-    @Expose
-    @SerializedName("world") // __ALPHA_8__
+    @JsonProperty("world") // __ALPHA_8__
     val world: String,
-    @Expose
-    @SerializedName("chain") // __ALPHA_8__
+    @JsonProperty("chain") // __ALPHA_8__
     val chain: String,
-    @Expose
-    @SerializedName("user") // __BASE58_256__
+    @JsonProperty("user") // __BASE58_256__
     val user: String,
-    @Expose
-    @SerializedName("merger") // __BASE58_256__
+    @JsonProperty("merger") // __BASE58_256__
     val merger: String
 ) : MsgPacker() {
     init {
@@ -38,17 +30,12 @@ data class MsgJoin constructor(
     }
 
     override fun jsonToByteArray(): ByteArray {
-        // Superclass 제외하고 serialize
-        val gson = GsonBuilder().addSerializationExclusionStrategy(object : ExclusionStrategy {
-            override fun shouldSkipField(f: FieldAttributes): Boolean {
-                return f.declaringClass == MsgPacker::class.java
-            }
-
-            override fun shouldSkipClass(clazz: Class<*>): Boolean {
-                return false
-            }
-        }).create()
-        return gson.toJson(this).toByteArray()
+        with(ObjectMapper()) {
+            return writeValueAsBytes(this@MsgJoin)
+        }
     }
 
+    override fun toString(): String {
+        return header.toString() + "\n" + String(jsonToByteArray())
+    }
 }

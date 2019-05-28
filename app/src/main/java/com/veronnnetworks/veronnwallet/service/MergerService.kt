@@ -11,6 +11,7 @@ import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgSuccess
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgAccept
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgChallenge
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgResponse2
+import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgUnpacker
 import com.veronnnetworks.veronnwallet.data.local.PreferenceHelper
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs
 import com.veronnnetworks.veronnwallet.utils.ext.*
@@ -68,6 +69,11 @@ class MergerService : DaggerService() {
         super.onCreate()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        grpcService.terminateChannel()
+    }
+
     private fun connectWithMerger() {
         val msgJoin = MsgJoin(
             getTimestamp(),
@@ -79,14 +85,19 @@ class MergerService : DaggerService() {
 
         grpcService.keyExService(msgJoin)
             .flatMap { msgChallengeBytes ->
-                MsgChallenge(msgChallengeBytes).generateResponse()
+                val msgChallenge = MsgUnpacker(msgChallengeBytes).body as MsgChallenge
+                msgChallenge.generateResponse()
                     .map { msgResponse1: MsgResponse1 ->
-                        Pair(MsgChallenge(msgChallengeBytes), msgResponse1)
+                        Pair(msgChallenge, msgResponse1)
                     }
             }.flatMap { t: Pair<MsgChallenge, MsgResponse1> ->
                 grpcService.keyExService(t.second)
                     .map { msgResponse2Bytes ->
-                        Triple(t.first, t.second, MsgResponse2(msgResponse2Bytes))
+                        Triple(
+                            t.first,
+                            t.second,
+                            MsgUnpacker(msgResponse2Bytes).body as MsgResponse2
+                        )
                     }
             }.flatMap { t: Triple<MsgChallenge, MsgResponse1, MsgResponse2> ->
                 t.generateResponse()
@@ -94,7 +105,7 @@ class MergerService : DaggerService() {
                 grpcService.keyExService(msgSuccess)
             }.subscribeBy(
                 onError = { Timber.e(it) },
-                onSuccess = { Timber.d(MsgAccept(it).toString()) }
+                onSuccess = { Timber.d(MsgUnpacker(it).toString()) }
             ).addTo(compositeDisposable)
     }
 
@@ -132,8 +143,8 @@ class MergerService : DaggerService() {
                     third.dh.x.toByteArray(Charsets.UTF_8) +
                     third.dh.y.toByteArray(Charsets.UTF_8) +
                     third.time.longBytes(),
-            third.merger.sig,
-            third.merger.cert
+            third.mergerInfo.sig,
+            third.mergerInfo.cert
         ).flatMap { result ->
             // point 에서 public key 추출
             val mergerPubKey = Pair(

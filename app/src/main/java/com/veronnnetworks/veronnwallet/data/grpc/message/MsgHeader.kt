@@ -18,7 +18,7 @@ class MsgHeader(
     private var msgVersion: Byte = MSG_VERSION,
     var msgType: TypeMsg = TypeMsg.MSG_NULL,
     var macType: TypeMac = TypeMac.NONE,
-    var serializationType: TypeSerialization = TypeSerialization.NONE,
+    var serializationType: TypeSerialization = TypeSerialization.CBOR,
     private var dummy: Byte = 0x00,
     var totalLength: Int = 0,
     var worldId: String? = TEST_WORLD_ID,
@@ -63,4 +63,16 @@ class MsgHeader(
         return buffer.array()
     }
 
+    override fun toString(): String {
+        return "header(" +
+                "identifier=$identifier," +
+                "msgVersion=$msgVersion," +
+                "msgType=$msgType," +
+                "macType=$macType," +
+                "serializationType=$serializationType," +
+                "totalLength=$totalLength," +
+                "worldId=$worldId," +
+                "chainId=$chainId," +
+                "sender=$sender)"
+    }
 }

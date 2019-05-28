@@ -112,7 +112,11 @@ dependencies {
     implementation "io.grpc:grpc-stub:$grpc_ver"
     compileOnly "javax.annotation:javax.annotation-api:1.3.2"
 
-    implementation "com.google.code.gson:gson:$gson_ver"
+    // jackson
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_ver"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_ver"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_ver"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$jackson_ver"
 
     testImplementation "org.robolectric:robolectric:$roboletric_ver"
     testImplementation "io.mockk:mockk:$mockk_ver"

@@ -56,7 +56,7 @@ class MainActivity : BaseActivity() {
         super.onStart()
         Intent(this, MergerService::class.java).also { intent ->
             intent.putExtra(MergerService.INTENT_MERGER_IP, "10.10.10.112")
-            intent.putExtra(MergerService.INTENT_MERGER_PORT, 50051)
+            intent.putExtra(MergerService.INTENT_MERGER_PORT, 8089)
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
