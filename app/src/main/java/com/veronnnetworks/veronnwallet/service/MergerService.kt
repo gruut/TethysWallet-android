@@ -8,7 +8,6 @@ import com.veronnnetworks.veronnwallet.data.grpc.GrpcService
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgJoin
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgResponse1
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgSuccess
-import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgAccept
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgChallenge
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgResponse2
 import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgUnpacker

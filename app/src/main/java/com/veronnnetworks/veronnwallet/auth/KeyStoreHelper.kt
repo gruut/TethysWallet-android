@@ -2,8 +2,6 @@ package com.veronnnetworks.veronnwallet.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.spongycastle.math.ec.ECPoint
-import java.security.PrivateKey
 import java.security.PublicKey
 
 interface KeyStoreHelper {

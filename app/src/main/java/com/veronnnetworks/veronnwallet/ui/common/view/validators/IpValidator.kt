@@ -6,7 +6,6 @@ import android.util.Patterns
 import com.veronnnetworks.veronnwallet.ui.common.view.VtlValidationFailureException
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import java.util.regex.Pattern
 
 /**
  * Validation error when the text is invalid ip address

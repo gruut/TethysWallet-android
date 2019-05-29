@@ -1,7 +1,6 @@
 package com.veronnnetworks.veronnwallet.data.grpc
 
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgPacker
-import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgUnpacker
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.GRPC_TIMEOUT
 import com.veronnnetworks.veronnwallet.utils.rx.SchedulerProvider
 import com.veronnworks.veronnwallet.GruutUserServiceGrpc

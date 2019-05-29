@@ -1,7 +1,6 @@
 package com.veronnnetworks.veronnwallet.data.local
 
 import android.content.Context
-import android.util.Base64
 import com.veronnnetworks.veronnwallet.auth.LocalKeyStoreHelper
 import com.veronnnetworks.veronnwallet.di.PreferenceInfo
 import com.veronnnetworks.veronnwallet.utils.ext.fromBase64
