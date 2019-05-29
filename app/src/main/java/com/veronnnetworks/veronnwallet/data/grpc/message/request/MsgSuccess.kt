@@ -12,7 +12,8 @@ data class MsgSuccess constructor(
     @JsonProperty("user") // __BASE58_256__
     val user: String,
     @JsonProperty("val") // __BOOLEAN__
-    val result: Boolean
+    val result: Boolean,
+    override val sharedSecretKey: ByteArray?
 ) : MsgPacker() {
     init {
         setHeader()
@@ -33,5 +34,23 @@ data class MsgSuccess constructor(
 
     override fun toString(): String {
         return header.toString() + "\n" + String(jsonToByteArray())
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MsgSuccess
+
+        if (sharedSecretKey != null) {
+            if (other.sharedSecretKey == null) return false
+            if (!sharedSecretKey.contentEquals(other.sharedSecretKey)) return false
+        } else if (other.sharedSecretKey != null) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return sharedSecretKey?.contentHashCode() ?: 0
     }
 }

@@ -162,7 +162,8 @@ class MergerService : DaggerService() {
             MsgSuccess(
                 getTimestamp(),
                 preferenceHelper.commonName!!,
-                t.first
+                t.first,
+                t.second
             )
         }
     }

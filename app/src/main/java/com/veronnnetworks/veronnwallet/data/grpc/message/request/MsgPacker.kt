@@ -4,15 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory
 import com.google.protobuf.ByteString
+import com.veronnnetworks.veronnwallet.auth.HmacHelper
 import com.veronnnetworks.veronnwallet.data.grpc.message.MsgHeader
+import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMac
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeSerialization
 import com.veronnworks.veronnwallet.Request
-import java.io.ByteArrayOutputStream
 
 abstract class MsgPacker {
     @JsonIgnore
     var header: MsgHeader = MsgHeader()
 
+    abstract val sharedSecretKey: ByteArray?
     abstract fun setHeader()
     abstract fun jsonToByteArray(): ByteArray
 
@@ -28,16 +30,21 @@ abstract class MsgPacker {
         }
     }
 
-    fun toByteArray(): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        outputStream.write(header.toByteArray())
-        outputStream.write(jsonToByteArray().serialize())
-        // TODO: Add MAC
+    fun ByteArray.generateHmac(key: ByteArray): ByteArray? =
+        when (header.macType) {
+            TypeMac.HMAC -> HmacHelper.getHmacSignature(key, this)
+            else -> null
+        }
 
-        return outputStream.toByteArray()
+    fun toByteArray(key: ByteArray?): ByteArray {
+        val result = header.toByteArray() + jsonToByteArray().serialize()
+        key?.let { return result + result.generateHmac(key)!! } ?: return result
     }
 
     fun toGrpcMsg(): Request {
-        return Request.newBuilder().setMessage(ByteString.copyFrom(toByteArray())).build()
+        return Request
+            .newBuilder()
+            .setMessage(ByteString.copyFrom(toByteArray(sharedSecretKey)))
+            .build()
     }
 }

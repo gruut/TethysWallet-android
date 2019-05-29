@@ -1,5 +1,6 @@
 package com.veronnnetworks.veronnwallet.data.grpc.message.request
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMsg
@@ -15,6 +16,9 @@ data class MsgResponse1 constructor(
     @JsonProperty("user")
     val user: UserJson
 ) : MsgPacker() {
+    @JsonIgnore
+    override val sharedSecretKey: ByteArray? = null
+
     data class DHJson constructor(
         @JsonProperty("x") // __HEX_256__
         val x: String,

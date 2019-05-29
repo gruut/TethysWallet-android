@@ -1,5 +1,6 @@
 package com.veronnnetworks.veronnwallet.data.grpc.message.request
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.veronnnetworks.veronnwallet.data.grpc.message.TypeMsg
@@ -11,6 +12,9 @@ data class MsgSetupMerger constructor(
     @JsonProperty("cert") // x509 PEM
     val certificate: String
 ) : MsgPacker() {
+    @JsonIgnore
+    override val sharedSecretKey: ByteArray? = null
+
     init {
         setHeader()
     }
