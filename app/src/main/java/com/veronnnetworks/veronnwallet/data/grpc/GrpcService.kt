@@ -1,6 +1,7 @@
 package com.veronnnetworks.veronnwallet.data.grpc
 
 import com.veronnnetworks.veronnwallet.data.grpc.message.request.MsgPacker
+import com.veronnnetworks.veronnwallet.data.grpc.message.response.MsgUnpacker
 import com.veronnnetworks.veronnwallet.utils.VeronnConfigs.GRPC_TIMEOUT
 import com.veronnnetworks.veronnwallet.utils.rx.SchedulerProvider
 import com.veronnworks.veronnwallet.GruutUserServiceGrpc
@@ -36,7 +37,7 @@ class GrpcService constructor(
                 .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.SECONDS)
                 .keyExService(msg.toGrpcMsg())
 
-            Timber.d("[%s] %s", reply.status.toString(), reply.message.toStringUtf8())
+            Timber.d("[%s] %s", reply.status.toString(), MsgUnpacker(reply.message.toByteArray()))
             when (reply.status) {
                 Reply.Status.SUCCESS -> reply.message.toByteArray()
                 else -> throw Exception("Error Message From Merger: ${reply.status.name}")

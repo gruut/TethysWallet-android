@@ -38,6 +38,10 @@ class MsgUnpacker(
 
     private fun ByteArray.deserialize(): MsgBody? = when (header.msgType) {
         TypeMsg.MSG_CHALLENGE -> getMapper().readValue(this, MsgChallenge::class.java)
+        TypeMsg.MSG_RESPONSE_2 -> getMapper().readValue(this, MsgResponse2::class.java)
+        TypeMsg.MSG_ACCEPT -> getMapper().readValue(this, MsgAccept::class.java)
+        TypeMsg.MSG_REQ_SSIG -> getMapper().readValue(this, MsgReqSsig::class.java)
+        TypeMsg.MSG_RES_TX_CHECK -> getMapper().readValue(this, MsgResTxCheck::class.java)
         else -> null
     }
 
