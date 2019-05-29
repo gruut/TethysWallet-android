@@ -7,4 +7,7 @@ object CryptoConstants {
     const val ALIAS_SELF = "SELF_CERT"
     const val ALIAS_VERONN = "VERONN_AUTH"
     const val SHA256withECDSA = "SHA256withECDSA"
+    const val ECDH = "ECDH"
+    const val RSA_ECB_PKCS1Padding = "RSA/ECB/PKCS1Padding"
+    const val HMAC_SHA256 = "HmacSHA256"
 }

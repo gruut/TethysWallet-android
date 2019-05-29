@@ -3,6 +3,7 @@ package com.veronnnetworks.veronnwallet.auth
 import com.veronnnetworks.veronnwallet.data.local.PreferenceHelper
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.ALIAS_VERONN
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.CURVE_SECP256R1
+import com.veronnnetworks.veronnwallet.utils.CryptoConstants.ECDH
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.SHA256withECDSA
 import com.veronnnetworks.veronnwallet.utils.ext.*
@@ -122,7 +123,7 @@ class AppKeyStoreHelper @Inject constructor(
     override fun getSharedSecretKey(othersPubKey: PublicKey): Single<ByteArray> {
         return Single.fromCallable {
             val myPrvKey = preferenceHelper.ecSecretKey.hexToPrivateKey()
-            with(KeyAgreement.getInstance("ECDH", "SC")) {
+            with(KeyAgreement.getInstance(ECDH, "SC")) {
                 init(myPrvKey)
                 doPhase(othersPubKey, true)
                 generateSecret().toSha256()
@@ -140,9 +141,9 @@ class AppKeyStoreHelper @Inject constructor(
             }
         }
 
-    override fun verifyWithCert(data: ByteArray, signature: String, pem: String): Single<Boolean> =
+    override fun verifyWithCert(data: ByteArray, signature: String, cert: String): Single<Boolean> =
         Single.fromCallable {
-            val cert = pem.toX509Cert()
+            val cert = cert.toX509Cert()
             with(Signature.getInstance(SHA256withECDSA)) {
                 initVerify(cert)
                 update(data)

@@ -4,6 +4,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.ALIAS_LOCAL
 import com.veronnnetworks.veronnwallet.utils.CryptoConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+import com.veronnnetworks.veronnwallet.utils.CryptoConstants.RSA_ECB_PKCS1Padding
 import com.veronnnetworks.veronnwallet.utils.ext.fromBase64
 import com.veronnnetworks.veronnwallet.utils.ext.toBase64
 import java.security.KeyPairGenerator
@@ -53,7 +54,7 @@ object LocalKeyStoreHelper {
 
     fun encrypt(plainText: String): String {
         val cipher = Cipher
-            .getInstance("RSA/ECB/PKCS1Padding").apply {
+            .getInstance(RSA_ECB_PKCS1Padding).apply {
                 init(
                     Cipher.ENCRYPT_MODE,
                     (keyEntry as KeyStore.PrivateKeyEntry).certificate.publicKey
@@ -66,7 +67,7 @@ object LocalKeyStoreHelper {
 
     fun decrypt(base64EncodedCipherText: String): String {
         val cipher = Cipher
-            .getInstance("RSA/ECB/PKCS1Padding").apply {
+            .getInstance(RSA_ECB_PKCS1Padding).apply {
                 init(Cipher.DECRYPT_MODE, (keyEntry as KeyStore.PrivateKeyEntry).privateKey)
             }
 
