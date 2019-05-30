@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
+import io.tethys.tethyswallet.data.grpc.message.request.contracts.StandardContractInput
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgTx constructor(
@@ -20,7 +21,7 @@ data class MsgTx constructor(
     @JsonProperty("user")
     val user: User,
     @JsonProperty("endorser")
-    val endorser: List<Endorser>
+    val endorser: Array<Endorser>
 ) : MsgPacker() {
 
     data class TxBody(
@@ -31,8 +32,21 @@ data class MsgTx constructor(
         @JsonProperty("fee") // __DECIMAL__
         val fee: Int,
         @JsonProperty("input")
-        val input: List<List<Map<String, String>>> // TODO Smart Contract 값이 들어갈 예정
-    )
+        val input: Array<StandardContractInput>
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as TxBody
+
+            if (!input.contentEquals(other.input)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int = input.contentHashCode()
+    }
 
     data class User(
         @JsonProperty("id") // __BASE58_256__
@@ -76,4 +90,17 @@ data class MsgTx constructor(
     override fun toString(): String {
         return header.toString() + "\n" + String(jsonToByteArray())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MsgTx
+
+        if (!endorser.contentEquals(other.endorser)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = endorser.contentHashCode()
 }
