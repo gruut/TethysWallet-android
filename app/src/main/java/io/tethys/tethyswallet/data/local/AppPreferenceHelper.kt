@@ -2,19 +2,20 @@ package io.tethys.tethyswallet.data.local
 
 import android.content.Context
 import io.tethys.tethyswallet.auth.LocalKeyStoreHelper
-import io.tethys.tethyswallet.di.PreferenceInfo
+import io.tethys.tethyswallet.utils.TethysConfigs
 import io.tethys.tethyswallet.utils.ext.fromBase64
 import io.tethys.tethyswallet.utils.ext.toBase64
-import javax.inject.Inject
 
-class AppPreferenceHelper @Inject constructor(
+class AppPreferenceHelper constructor(
     val context: Context,
-    @PreferenceInfo val prefFileName: String
+    val prefFileName: String
 ) : PreferenceHelper {
     private val PREF_KEY_COMMON_NAME: String = "PREF_KEY_COMMON_NAME"
     private val PREF_KEY_PK: String = "PREF_KEY_PK"
     private val PREF_KEY_ENCRYPTED_SK: String = "PREF_KEY_ENCRYPTED_SK"
     private val PREF_KEY_IS_AUTONYM: String = "PREF_KEY_IS_AUTONYM"
+    private val PREF_KEY_WORLD_ID: String = "PREF_KEY_WORLD_ID"
+    private val PREF_KEY_CHAIN_ID: String = "PREF_KEY_CHAIN_ID"
 
     private val prefs = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
 
@@ -23,7 +24,7 @@ class AppPreferenceHelper @Inject constructor(
         set(value) = prefs.edit().putString(PREF_KEY_COMMON_NAME, value).apply()
 
     override var ecPublicKey: ByteArray?
-        get() = prefs.getString(PREF_KEY_PK, null)?.let { it.fromBase64() }
+        get() = prefs.getString(PREF_KEY_PK, null)?.fromBase64()
         set(value) = prefs.edit().run {
             putString(
                 PREF_KEY_PK,
@@ -41,6 +42,13 @@ class AppPreferenceHelper @Inject constructor(
     override var isAutonym: Boolean
         get() = prefs.getBoolean(PREF_KEY_IS_AUTONYM, false)
         set(value) = prefs.edit().putBoolean(PREF_KEY_IS_AUTONYM, value).apply()
+
+    override var worldId: String?
+        get() = prefs.getString(PREF_KEY_WORLD_ID, TethysConfigs.TEST_WORLD_ID)
+        set(value) = prefs.edit().putString(PREF_KEY_WORLD_ID, value).apply()
+    override var chainId: String?
+        get() = prefs.getString(PREF_KEY_CHAIN_ID, TethysConfigs.TEST_CHAIN_ID)
+        set(value) = prefs.edit().putString(PREF_KEY_CHAIN_ID, value).apply()
 
     private fun putSecurely(key: String, value: Any?) {
         prefs.edit().run {

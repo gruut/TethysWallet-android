@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
+import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgJoin constructor(
@@ -21,8 +23,12 @@ data class MsgJoin constructor(
     @JsonIgnore
     override var sharedSecretKey: ByteArray? = null
 
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
+
     init {
         setHeader()
+        prefHelper.worldId = world
+        prefHelper.chainId = chain
     }
 
     override fun setHeader() {

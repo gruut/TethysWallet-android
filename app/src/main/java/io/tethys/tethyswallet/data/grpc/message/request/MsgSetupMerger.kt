@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
+import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgSetupMerger constructor(
@@ -15,6 +17,8 @@ data class MsgSetupMerger constructor(
     @JsonIgnore
     override var sharedSecretKey: ByteArray? = null
 
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
+
     init {
         setHeader()
     }
@@ -22,6 +26,8 @@ data class MsgSetupMerger constructor(
     override fun setHeader() {
         this.header.msgType = TypeMsg.MSG_SETUP_MERGER
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
+        this.header.worldId = prefHelper.worldId
+        this.header.chainId = prefHelper.chainId
     }
 
     override fun jsonToByteArray(): ByteArray {

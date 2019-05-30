@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMac
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
+import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgSuccess constructor(
@@ -20,6 +22,8 @@ data class MsgSuccess constructor(
     @JsonIgnore
     override var sharedSecretKey: ByteArray? = null
 
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
+
     init {
         setHeader()
     }
@@ -27,6 +31,8 @@ data class MsgSuccess constructor(
     override fun setHeader() {
         this.header.msgType = TypeMsg.MSG_SUCCESS
         this.header.macType = TypeMac.HMAC
+        this.header.worldId = prefHelper.worldId
+        this.header.chainId = prefHelper.chainId
         this.header.sender = user
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
     }

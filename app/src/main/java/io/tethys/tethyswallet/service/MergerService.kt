@@ -23,15 +23,16 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.zipWith
 import io.tethys.tethyswallet.data.grpc.message.TypeMode
+import io.tethys.tethyswallet.ui.BaseApp
 import timber.log.Timber
 import javax.inject.Inject
 
 class MergerService : DaggerService() {
 
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
+
     @Inject
     lateinit var keyStoreHelper: KeyStoreHelper
-    @Inject
-    lateinit var preferenceHelper: PreferenceHelper
     @Inject
     lateinit var schedulerProvider: SchedulerProvider
 
@@ -79,7 +80,7 @@ class MergerService : DaggerService() {
             getTimestamp(),
             TethysConfigs.TEST_WORLD_ID,
             TethysConfigs.TEST_CHAIN_ID,
-            preferenceHelper.commonName!!,
+            prefHelper.commonName!!,
             "" // TODO: Set merger's id based on data from TRACKER
         )
 
@@ -114,7 +115,7 @@ class MergerService : DaggerService() {
     private fun MsgChallenge.generateResponse(): Single<MsgResponse1> {
         val nonce = getNonce(256)
         val time = getTimestamp()
-        val point = preferenceHelper.ecPublicKey.hexToPointPair()
+        val point = prefHelper.ecPublicKey.hexToPointPair()
         return keyStoreHelper.getCertificatePem()
             .zipWith(
                 keyStoreHelper.signWithECKey(
@@ -130,7 +131,7 @@ class MergerService : DaggerService() {
                     nonce,
                     MsgResponse1.DHJson(point.first.toString(), point.second.toString()),
                     MsgResponse1.UserJson(
-                        preferenceHelper.commonName!!,
+                        prefHelper.commonName!!,
                         cert,
                         signature
                     )
@@ -163,7 +164,7 @@ class MergerService : DaggerService() {
 
             MsgSuccess(
                 getTimestamp(),
-                preferenceHelper.commonName!!,
+                prefHelper.commonName!!,
                 TypeMode.SIGNER.mode,
                 t.first
             ).apply {

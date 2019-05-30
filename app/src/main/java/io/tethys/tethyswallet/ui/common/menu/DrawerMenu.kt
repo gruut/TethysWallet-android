@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import io.tethys.tethyswallet.R
 import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.ui.NavigationController
 import io.tethys.tethyswallet.ui.join.JoinActivity
 import io.tethys.tethyswallet.ui.main.MainActivity
@@ -18,9 +19,9 @@ import kotlin.reflect.KClass
 
 class DrawerMenu @Inject constructor(
     private val activity: AppCompatActivity,
-    private val navigationController: NavigationController,
-    private val preferenceHelper: PreferenceHelper
+    private val navigationController: NavigationController
 ) {
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var currentNavigationItem: DrawerNavigationItem
 
@@ -49,7 +50,7 @@ class DrawerMenu @Inject constructor(
         }
 
         navigationView.inflateMenu(R.menu.anonym_drawer)
-        if (preferenceHelper.isAutonym) {
+        if (prefHelper.isAutonym) {
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.autonym_drawer)
         }

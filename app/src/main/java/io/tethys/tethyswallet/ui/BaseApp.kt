@@ -1,12 +1,15 @@
 package io.tethys.tethyswallet.ui
 
-import io.tethys.tethyswallet.BuildConfig
-import io.tethys.tethyswallet.di.component.DaggerAppComponent
-import io.tethys.tethyswallet.di.module.NetworkModule
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
+import io.tethys.tethyswallet.BuildConfig
+import io.tethys.tethyswallet.data.local.AppPreferenceHelper
+import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.di.component.DaggerAppComponent
+import io.tethys.tethyswallet.di.module.NetworkModule
+import io.tethys.tethyswallet.utils.AppConstants
 import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
@@ -14,10 +17,16 @@ import java.net.SocketException
 class BaseApp : DaggerApplication() {
 
     override fun onCreate() {
+        prefHelper = AppPreferenceHelper(applicationContext, AppConstants.PREF_NAME)
         super.onCreate()
 
         setupTimber()
         setupErrorHandler()
+    }
+
+    companion object {
+        lateinit var prefHelper: PreferenceHelper
+            private set
     }
 
     private fun setupTimber() {

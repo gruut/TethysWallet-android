@@ -26,18 +26,6 @@ class AppModule {
     }
 
     @Provides
-    @PreferenceInfo
-    fun providePreferenceName(): String {
-        return AppConstants.PREF_NAME
-    }
-
-    @Provides
-    @Singleton
-    fun providePrefHelper(appPreferenceHelper: AppPreferenceHelper): PreferenceHelper {
-        return appPreferenceHelper
-    }
-
-    @Provides
     @Singleton
     fun provideGARepository(
         api: GAApi,
@@ -47,9 +35,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideKeyStoreHelper(
-        preferenceHelper: PreferenceHelper,
         schedulerProvider: SchedulerProvider
-    ): KeyStoreHelper = AppKeyStoreHelper(preferenceHelper, schedulerProvider)
+    ): KeyStoreHelper = AppKeyStoreHelper(schedulerProvider)
 
     @Provides
     fun provideSchedulerProvider(): SchedulerProvider {

@@ -3,6 +3,7 @@ package io.tethys.tethyswallet.auth
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.tethys.tethyswallet.data.local.PreferenceHelper
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.CryptoConstants.ALIAS_TETHYS
 import io.tethys.tethyswallet.utils.CryptoConstants.CURVE_SECP256R1
 import io.tethys.tethyswallet.utils.CryptoConstants.ECDH
@@ -36,12 +37,14 @@ import javax.crypto.KeyAgreement
 import javax.inject.Inject
 
 class AppKeyStoreHelper @Inject constructor(
-    private val preferenceHelper: PreferenceHelper,
     private val schedulerProvider: SchedulerProvider
 ) : KeyStoreHelper {
+
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
+
     override fun isECKeyPairExist(): Boolean {
-        return preferenceHelper.ecPublicKey?.isNotEmpty() ?: false
-                && preferenceHelper.ecSecretKey?.isNotEmpty() ?: false
+        return prefHelper.ecPublicKey?.isNotEmpty() ?: false
+                && prefHelper.ecSecretKey?.isNotEmpty() ?: false
     }
 
     override fun generateECKeyPair(): Completable {
@@ -59,11 +62,11 @@ class AppKeyStoreHelper @Inject constructor(
                 init(keyGenParam)
                 generateKeyPair().apply {
                     val privateKey = private as ECPrivateKeyParameters
-                    preferenceHelper.ecSecretKey = Hex.encode(privateKey.d.toByteArray())
+                    prefHelper.ecSecretKey = Hex.encode(privateKey.d.toByteArray())
 
                     val publicKey = public as ECPublicKeyParameters
-                    preferenceHelper.ecPublicKey = Hex.encode(publicKey.q.getEncoded(false))
-                    preferenceHelper.commonName =
+                    prefHelper.ecPublicKey = Hex.encode(publicKey.q.getEncoded(false))
+                    prefHelper.commonName =
                         Hex.encode(publicKey.q.getEncoded(false))
                             .toSha256()
                             .encodeToBase58String()
@@ -75,11 +78,11 @@ class AppKeyStoreHelper @Inject constructor(
     override fun generateCSRPem(): Single<String> {
         return Single.fromCallable {
             val x500Name = X500NameBuilder(X500Name.getDefaultStyle())
-                .addRDN(BCStyle.CN, preferenceHelper.commonName)
+                .addRDN(BCStyle.CN, prefHelper.commonName)
                 .build()
 
             val pubKeyInfo =
-                SubjectPublicKeyInfo.getInstance(preferenceHelper.ecPublicKey.hexToPublicKey().encoded)
+                SubjectPublicKeyInfo.getInstance(prefHelper.ecPublicKey.hexToPublicKey().encoded)
             val requestInfo = CertificationRequestInfo(x500Name, pubKeyInfo, null)
 
             val algorithmIdentifier = AlgorithmIdentifier(SECObjectIdentifiers.secp256r1)
@@ -100,7 +103,7 @@ class AppKeyStoreHelper @Inject constructor(
                 setCertificateEntry(ALIAS_TETHYS, x509Cert)
             }
 
-            preferenceHelper.isAutonym = true
+            prefHelper.isAutonym = true
             return@fromCallable
         }.subscribeOn(schedulerProvider.io())
     }
@@ -116,13 +119,13 @@ class AppKeyStoreHelper @Inject constructor(
 
     override fun getEncryptedSecretKeyPem(password: String): Single<String> {
         return Single.fromCallable {
-            preferenceHelper.ecSecretKey.hexToPrivateKey().toPemString(password)
+            prefHelper.ecSecretKey.hexToPrivateKey().toPemString(password)
         }.subscribeOn(schedulerProvider.io())
     }
 
     override fun getSharedSecretKey(othersPubKey: PublicKey): Single<ByteArray> {
         return Single.fromCallable {
-            val myPrvKey = preferenceHelper.ecSecretKey.hexToPrivateKey()
+            val myPrvKey = prefHelper.ecSecretKey.hexToPrivateKey()
             with(KeyAgreement.getInstance(ECDH, "SC")) {
                 init(myPrvKey)
                 doPhase(othersPubKey, true)
@@ -133,7 +136,7 @@ class AppKeyStoreHelper @Inject constructor(
 
     override fun signWithECKey(data: ByteArray): Single<String> =
         Single.fromCallable {
-            val secretKey = preferenceHelper.ecSecretKey.hexToPrivateKey()
+            val secretKey = prefHelper.ecSecretKey.hexToPrivateKey()
             with(Signature.getInstance(SHA256withECDSA)) {
                 initSign(secretKey)
                 update(data)

@@ -5,4 +5,6 @@ interface PreferenceHelper {
     var ecPublicKey: ByteArray?
     var ecSecretKey: ByteArray?
     var isAutonym: Boolean
+    var worldId: String?
+    var chainId: String?
 }

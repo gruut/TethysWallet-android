@@ -12,6 +12,7 @@ import io.tethys.tethyswallet.data.GARepository
 import io.tethys.tethyswallet.data.api.response.SignUpResponse
 import io.tethys.tethyswallet.data.local.PreferenceHelper
 import io.tethys.tethyswallet.model.UserInfo
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.ui.Result
 import io.tethys.tethyswallet.ui.common.mapper.toResult
 import io.tethys.tethyswallet.utils.ext.map
@@ -22,9 +23,10 @@ import javax.inject.Inject
 class JoinViewModel @Inject constructor(
     private val keyStoreHelper: KeyStoreHelper,
     private val gaRepository: GARepository,
-    private val preferenceHelper: PreferenceHelper,
     private val schedulerProvider: SchedulerProvider
 ) : ViewModel(), LifecycleObserver {
+
+    private val prefHelper: PreferenceHelper = BaseApp.prefHelper
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val mutableGenerateState: MutableLiveData<Result<Unit>> = MutableLiveData()
@@ -39,7 +41,7 @@ class JoinViewModel @Inject constructor(
     }
 
     fun isKeyExist(): Boolean {
-        return !preferenceHelper.commonName.isNullOrEmpty()
+        return !prefHelper.commonName.isNullOrEmpty()
     }
 
     fun generateECKeyPair() {
