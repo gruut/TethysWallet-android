@@ -1,2 +1,2 @@
-# VeronnWallet-android
-VeronnWallet android native application
+# TethysWallet-android
+TethysWallet android native application

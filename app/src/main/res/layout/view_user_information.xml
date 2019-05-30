@@ -6,7 +6,7 @@
 
         <variable
             name="userInfo"
-            type="com.veronnnetworks.veronnwallet.model.UserInfo" />
+            type="io.tethys.tethyswallet.model.UserInfo" />
     </data>
 
     <ScrollView
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_name_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -36,9 +36,9 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@={userInfo.name}" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_birth_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -57,9 +57,9 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@={userInfo.birthDate}" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_mobile_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="@={userInfo.mobile}" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                     android:text="@string/others" />
             </RadioGroup>
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_isc_type_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -141,9 +141,9 @@
                     android:hint="@string/isc_type"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_isc_code_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -159,9 +159,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/isc_code" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-            <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+            <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                 android:id="@+id/user_location_layout"
                 style="@style/AppTheme.TextInputLayoutAppearance"
                 android:layout_width="match_parent"
@@ -179,7 +179,7 @@
                     android:hint="@string/address"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+            </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
         </LinearLayout>
     </ScrollView>
 </layout>

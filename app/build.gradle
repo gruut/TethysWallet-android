@@ -37,7 +37,7 @@ protobuf {
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
-        applicationId "com.veronnnetworks.veronnwallet"
+        applicationId "com.tethys.tethyswallet"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1

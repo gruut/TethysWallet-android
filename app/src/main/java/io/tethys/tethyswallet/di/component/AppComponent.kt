@@ -1,0 +1,42 @@
+package io.tethys.tethyswallet.di.component
+
+import android.app.Application
+import io.tethys.tethyswallet.di.builder.JoinActivityBuilder
+import io.tethys.tethyswallet.di.builder.MainActivityBuilder
+import io.tethys.tethyswallet.di.builder.MergerActivityBuilder
+import io.tethys.tethyswallet.di.builder.MergerServiceBuilder
+import io.tethys.tethyswallet.di.module.AppModule
+import io.tethys.tethyswallet.di.module.NetworkModule
+import io.tethys.tethyswallet.di.module.ViewModelModule
+import io.tethys.tethyswallet.ui.BaseApp
+import dagger.BindsInstance
+import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Singleton
+
+@Singleton
+@Component(
+    modules = [
+        AndroidSupportInjectionModule::class,
+        AppModule::class,
+        NetworkModule::class,
+        ViewModelModule::class,
+        JoinActivityBuilder::class,
+        MainActivityBuilder::class,
+        MergerActivityBuilder::class,
+        MergerServiceBuilder::class
+    ]
+)
+interface AppComponent : AndroidInjector<BaseApp> {
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
+
+        fun networkModule(networkModule: NetworkModule): Builder
+        fun build(): AppComponent
+    }
+
+    override fun inject(instance: BaseApp)
+}

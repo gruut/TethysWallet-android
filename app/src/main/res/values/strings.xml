@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VeronnWallet</string>
+    <string name="app_name">TethysWallet</string>
 
     <string name="nav_content_description_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="nav_content_description_drawer_close" translatable="false">Close navigation drawer</string>

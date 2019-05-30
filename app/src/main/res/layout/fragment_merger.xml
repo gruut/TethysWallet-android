@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+                <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_ip_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -65,10 +65,10 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="@={ipAddress}" />
-                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+                </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
 
-                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+                <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_port_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -88,9 +88,9 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="@={portNumber}" />
-                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+                </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+                <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_password_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -112,9 +112,9 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="@={password}" />
-                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+                </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
 
-                <com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout
+                <io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout
                     android:id="@+id/merger_password_check_layout"
                     style="@style/AppTheme.TextInputLayoutAppearance"
                     android:layout_width="match_parent"
@@ -136,7 +136,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </com.veronnnetworks.veronnwallet.ui.common.view.ValidatableTextInputLayout>
+                </io.tethys.tethyswallet.ui.common.view.ValidatableTextInputLayout>
             </LinearLayout>
         </ScrollView>
 

@@ -8,7 +8,7 @@
 
         <variable
             name="userInfo"
-            type="com.veronnnetworks.veronnwallet.model.UserInfo" />
+            type="io.tethys.tethyswallet.model.UserInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
