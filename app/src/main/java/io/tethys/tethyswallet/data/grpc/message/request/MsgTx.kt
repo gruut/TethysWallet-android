@@ -67,7 +67,7 @@ data class MsgTx constructor(
     )
 
     @JsonIgnore
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 
     init {
         setHeader()

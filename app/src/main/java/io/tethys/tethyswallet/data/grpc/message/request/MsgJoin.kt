@@ -19,7 +19,7 @@ data class MsgJoin constructor(
     val merger: String
 ) : MsgPacker() {
     @JsonIgnore
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 
     init {
         setHeader()

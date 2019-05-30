@@ -1,5 +1,6 @@
 package io.tethys.tethyswallet.data.grpc.message.request
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMac
@@ -11,10 +12,14 @@ data class MsgSuccess constructor(
     val time: Int,
     @JsonProperty("user") // __BASE58_256__
     val user: String,
+    @JsonProperty("mode") // __ENUM_STRING__
+    val mode: String,
     @JsonProperty("val") // __BOOLEAN__
-    val result: Boolean,
-    override val sharedSecretKey: ByteArray?
+    val result: Boolean
 ) : MsgPacker() {
+    @JsonIgnore
+    override var sharedSecretKey: ByteArray? = null
+
     init {
         setHeader()
     }
@@ -34,23 +39,5 @@ data class MsgSuccess constructor(
 
     override fun toString(): String {
         return header.toString() + "\n" + String(jsonToByteArray())
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MsgSuccess
-
-        if (sharedSecretKey != null) {
-            if (other.sharedSecretKey == null) return false
-            if (!sharedSecretKey.contentEquals(other.sharedSecretKey)) return false
-        } else if (other.sharedSecretKey != null) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return sharedSecretKey?.contentHashCode() ?: 0
     }
 }

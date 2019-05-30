@@ -22,6 +22,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.zipWith
+import io.tethys.tethyswallet.data.grpc.message.TypeMode
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -163,9 +164,11 @@ class MergerService : DaggerService() {
             MsgSuccess(
                 getTimestamp(),
                 preferenceHelper.commonName!!,
-                t.first,
-                sharedSecretKey
-            )
+                TypeMode.SIGNER.mode,
+                t.first
+            ).apply {
+                this.sharedSecretKey = this@MergerService.sharedSecretKey
+            }
         }
     }
 }

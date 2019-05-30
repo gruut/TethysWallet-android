@@ -14,7 +14,7 @@ abstract class MsgPacker {
     @JsonIgnore
     var header: MsgHeader = MsgHeader()
 
-    abstract val sharedSecretKey: ByteArray?
+    abstract var sharedSecretKey: ByteArray?
     abstract fun setHeader()
     abstract fun jsonToByteArray(): ByteArray
 

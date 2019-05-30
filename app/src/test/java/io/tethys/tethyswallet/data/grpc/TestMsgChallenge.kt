@@ -22,7 +22,7 @@ data class TestMsgChallenge constructor(
     @Expose
     @SerializedName("mn") // __BASE64_256__
     val mergerNonce: String,
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 ) : MsgPacker() {
     init {
         setHeader()

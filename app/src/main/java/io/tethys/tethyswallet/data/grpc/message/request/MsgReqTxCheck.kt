@@ -20,7 +20,7 @@ data class MsgReqTxCheck constructor(
 ) : MsgPacker() {
 
     @JsonIgnore
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 
     init {
         setHeader()

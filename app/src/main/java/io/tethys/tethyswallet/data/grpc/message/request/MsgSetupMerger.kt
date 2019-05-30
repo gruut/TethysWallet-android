@@ -13,7 +13,7 @@ data class MsgSetupMerger constructor(
     val certificate: String
 ) : MsgPacker() {
     @JsonIgnore
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 
     init {
         setHeader()

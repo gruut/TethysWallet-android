@@ -17,7 +17,7 @@ data class MsgResponse1 constructor(
     val user: UserJson
 ) : MsgPacker() {
     @JsonIgnore
-    override val sharedSecretKey: ByteArray? = null
+    override var sharedSecretKey: ByteArray? = null
 
     data class DHJson constructor(
         @JsonProperty("x") // __HEX_256__
