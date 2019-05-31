@@ -66,14 +66,14 @@ fun ByteArray?.hexToPublicKey(): PublicKey {
     return KeyFactory.getInstance("ECDH", "SC").generatePublic(pubKeySpec)
 }
 
-fun ByteArray?.hexToPointPair(): Pair<ByteArray, ByteArray> {
+fun ByteArray?.hexToPointPair(): Pair<String, String> {
     this ?: throw IllegalArgumentException("Illegal point format")
 
     val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256R1)
     val curve = ecParameterSpec.curve
     val point = curve.decodePoint(Hex.decode(this))
 
-    return Pair(point.affineXCoord.encoded.encodeHex(), point.affineYCoord.encoded.encodeHex())
+    return Pair(point.affineXCoord.toString(), point.affineYCoord.toString())
 }
 
 fun Pair<ByteArray, ByteArray>.pointPairToHex(): ByteArray =
