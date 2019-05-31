@@ -2,6 +2,10 @@ package io.tethys.tethyswallet.data.grpc.message.response
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.tethys.tethyswallet.utils.ext.decodeBase58
+import io.tethys.tethyswallet.utils.ext.longBytes
+import io.tethys.tethyswallet.utils.ext.toSha256
+import java.util.*
 
 data class MsgReqSsig(
     @JsonProperty("block")
@@ -38,4 +42,13 @@ data class MsgReqSsig(
         @JsonProperty("sig") // __BASE64_SIG__
         val sig: String
     )
+
+    fun validateId(): Boolean =
+        Arrays.equals(
+            block.id.decodeBase58(),
+            (producer.id.decodeBase58() + block.time.longBytes() +
+                    block.world.toByteArray(Charsets.UTF_8) + block.chain.toByteArray(Charsets.UTF_8) +
+                    block.height.longBytes() + block.previd.decodeBase58()
+                    ).toSha256()
+        )
 }

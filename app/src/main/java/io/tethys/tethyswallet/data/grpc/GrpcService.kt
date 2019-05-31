@@ -1,5 +1,6 @@
 package io.tethys.tethyswallet.data.grpc
 
+import com.google.protobuf.ByteString
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import io.reactivex.Observable
@@ -11,6 +12,7 @@ import io.tethys.tethyswallet.TethysUserServiceGrpc
 import io.tethys.tethyswallet.data.grpc.message.request.MsgPacker
 import io.tethys.tethyswallet.data.grpc.message.response.MsgUnpacker
 import io.tethys.tethyswallet.utils.TethysConfigs.GRPC_TIMEOUT
+import io.tethys.tethyswallet.utils.ext.decodeBase58
 import io.tethys.tethyswallet.utils.rx.SchedulerProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -22,13 +24,19 @@ class GrpcService constructor(
 ) {
     private val channel = ManagedChannelBuilder.forAddress(ip, port).usePlaintext().build()
 
-    fun userService(msg: MsgPacker): Single<Reply> {
-        return Single.fromCallable {
+    fun userService(msg: MsgPacker): Single<Reply> =
+        Single.fromCallable {
             TethysUserServiceGrpc.newBlockingStub(channel)
                 .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.SECONDS)
                 .userService(msg.toGrpcMsg())
         }.subscribeOn(schedulerProvider.io())
-    }
+
+    fun signerService(msg: MsgPacker): Single<Reply> =
+        Single.fromCallable {
+            TethysUserServiceGrpc.newBlockingStub(channel)
+                .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.SECONDS)
+                .signerService(msg.toGrpcMsg())
+        }.subscribeOn(schedulerProvider.io())
 
     fun keyExService(msg: MsgPacker): Single<ByteArray> {
         Timber.d(msg.toString())
@@ -46,8 +54,11 @@ class GrpcService constructor(
         }.subscribeOn(schedulerProvider.io())
     }
 
-    fun reqSsigService(identity: Identity): Observable<Message> = asObservable<Message> {
-        TethysUserServiceGrpc.newStub(channel).reqSsigService(identity, it)
+    fun reqSsigService(base58Id: String): Observable<Message> = asObservable<Message> {
+        Identity.newBuilder().setSender(ByteString.copyFrom(base58Id.decodeBase58())).build()
+            .apply {
+                TethysUserServiceGrpc.newStub(channel).reqSsigService(this, it)
+            }
     }.subscribeOn(schedulerProvider.io())
 
     fun terminateChannel() {
