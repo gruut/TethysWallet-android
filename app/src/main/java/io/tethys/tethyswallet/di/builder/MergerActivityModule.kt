@@ -17,7 +17,7 @@ interface MergerActivityModule {
     fun providesAppCompatActivity(activity: MergerActivity): AppCompatActivity
 
     @ContributesAndroidInjector
-    fun contributeJoinFragment(): MergerFragment
+    fun contributeMergerFragment(): MergerFragment
 
     @Binds
     @IntoMap
