@@ -12,6 +12,7 @@ import io.tethys.tethyswallet.Reply
 import io.tethys.tethyswallet.auth.KeyStoreHelper
 import io.tethys.tethyswallet.data.grpc.GrpcService
 import io.tethys.tethyswallet.data.grpc.message.request.MsgSetupMerger
+import io.tethys.tethyswallet.data.grpc.message.response.MsgUnpacker
 import io.tethys.tethyswallet.ui.Result
 import io.tethys.tethyswallet.ui.common.mapper.toResult
 import io.tethys.tethyswallet.utils.ext.map
@@ -25,8 +26,8 @@ class MergerViewModel @Inject constructor(
 ) : ViewModel(), LifecycleObserver {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private val mutableReply: MutableLiveData<Result<Reply>> = MutableLiveData()
-    val reply: LiveData<Result<Reply>> = mutableReply
+    private val mutableReply: MutableLiveData<Result<ByteArray>> = MutableLiveData()
+    val reply: LiveData<Result<ByteArray>> = mutableReply
 
     val isLoading: LiveData<Boolean> by lazy {
         reply.map { it.inProgress }

@@ -15,7 +15,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.tethys.tethyswallet.R
-import io.tethys.tethyswallet.Reply
 import io.tethys.tethyswallet.databinding.FragmentMergerBinding
 import io.tethys.tethyswallet.ui.NavigationController
 import io.tethys.tethyswallet.ui.Result
@@ -63,19 +62,8 @@ class MergerFragment : BaseFragment() {
         }
         mergerViewModel.reply.observe(this) { result ->
             when (result) {
-                is Result.Failure -> {
-                    Timber.e(result.e)
-                }
-                is Result.Success -> {
-                    when (result.data.status) {
-                        Reply.Status.SUCCESS -> {
-                            activity?.finish()
-                        }
-                        else -> {
-                            Timber.e("Error Message From Merger: ${result.data.status}")
-                        }
-                    }
-                }
+                is Result.Failure -> Timber.e(result.e)
+                is Result.Success -> activity?.finish()
             }
         }
 
