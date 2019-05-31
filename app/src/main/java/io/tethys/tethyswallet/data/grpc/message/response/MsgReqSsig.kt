@@ -13,7 +13,9 @@ data class MsgReqSsig(
     @JsonProperty("producer")
     val producer: Producer,
     @JsonIgnore
-    override val merger: String = producer.id
+    override val merger: String = producer.id,
+    @JsonIgnore
+    override val time: Int = block.time
 ) : MsgBody {
     data class Block(
         @JsonProperty("id") // __BASE58_256__

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MsgChallenge constructor(
     @JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    override val time: Int,
     @JsonProperty("user") // __BASE58_256__
     val user: String,
     @JsonProperty("merger") // __BASE58_256__

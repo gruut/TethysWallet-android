@@ -2,12 +2,15 @@ package io.tethys.tethyswallet.data.grpc.message.response
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory
+import io.tethys.tethyswallet.Reply
 import io.tethys.tethyswallet.auth.HmacHelper
 import io.tethys.tethyswallet.data.grpc.message.MsgHeader
 import io.tethys.tethyswallet.data.grpc.message.TypeMac
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
 import io.tethys.tethyswallet.data.grpc.message.TypeSerialization
 import io.tethys.tethyswallet.utils.TethysConfigs.HEADER_LENGTH
+import io.tethys.tethyswallet.utils.TethysConfigs.MSG_EXP_TIME
+import io.tethys.tethyswallet.utils.ext.getTimestamp
 
 class MsgUnpacker(
     bytes: ByteArray,
@@ -45,7 +48,7 @@ class MsgUnpacker(
         else -> null
     }
 
-    fun checkMac(): Boolean = when (header.macType) {
+    private fun checkMac(): Boolean = when (header.macType) {
         TypeMac.HMAC -> {
             sharedSecretKey?.let {
                 HmacHelper.verifyHmacSignature(
@@ -59,7 +62,17 @@ class MsgUnpacker(
         else -> true
     }
 
-    fun checkSender(): Boolean = header.sender.equals(body?.merger)
+    private fun checkSender(): Boolean = body?.let { header.sender.equals(body.merger) } ?: false
+
+    private fun checkTime(): Boolean =
+        body?.let { (body.time + MSG_EXP_TIME) > getTimestamp() } ?: false
+
+    fun checkValidity(): Reply.Status {
+        if (!checkTime()) return Reply.Status.ECDH_TIMEOUT
+        if (!checkSender()) return Reply.Status.ECDH_ILLEGAL_ACCESS
+        if (!checkMac()) return Reply.Status.ECDH_INVALID_SIG
+        return Reply.Status.SUCCESS
+    }
 
     override fun toString(): String {
         return header.toString() + "\n" + body.toString()

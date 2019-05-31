@@ -22,4 +22,5 @@ object TethysConfigs {
             WORLD_ID_TYPE_SIZE + CHAIN_ID_TYPE_SIZE + SENDER_ID_TYPE_SIZE
 
     const val GRPC_TIMEOUT: Long = 5
+    const val MSG_EXP_TIME: Int = 10
 }

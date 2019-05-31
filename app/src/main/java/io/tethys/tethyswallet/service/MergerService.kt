@@ -70,8 +70,8 @@ class MergerService : DaggerService() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         grpcService.terminateChannel()
+        super.onDestroy()
     }
 
     private fun connectWithMerger() {
@@ -103,15 +103,16 @@ class MergerService : DaggerService() {
                 t.generateResponse()
             }.flatMap { msgSuccess ->
                 grpcService.keyExService(msgSuccess)
-            }.subscribeBy(
-                onError = { Timber.e(it) },
-                onSuccess = {
-                    dhKeyExchanged = (MsgUnpacker(it).body as MsgAccept).result
-                    Timber.d(MsgUnpacker(it).toString())
-
-                    // TODO  check if its signer and open the stream channel
-                }
-            ).addTo(compositeDisposable)
+            }.doOnError {
+                Timber.e(it)
+            }.doOnSuccess {
+                dhKeyExchanged = (MsgUnpacker(it).body as MsgAccept).result
+                Timber.d(MsgUnpacker(it).toString())
+                
+                // TODO  check if its signer and open the stream channel
+            }
+            .subscribe()
+            .addTo(compositeDisposable)
     }
 
     private fun readyForSign() =
