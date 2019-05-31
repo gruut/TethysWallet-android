@@ -172,7 +172,7 @@ class MergerService : DaggerService() {
     private fun Triple<MsgChallenge, MsgResponse1, MsgResponse2>.generateResponse(): Single<MsgSuccess> =
         keyStoreHelper.verifyWithCert( // verify merger's signature
             first.mergerNonce.fromBase64() +
-                    second.userNonce.fromBase64() +
+                    second.un.fromBase64() +
                     third.dh.x.toByteArray(Charsets.UTF_8) +
                     third.dh.y.toByteArray(Charsets.UTF_8) +
                     third.time.longBytes(),

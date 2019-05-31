@@ -12,7 +12,7 @@ data class MsgResponse1 constructor(
     @JsonProperty("time") // __TIMESTAMP__
     val time: Int,
     @JsonProperty("un") // __BASE64_256__
-    val userNonce: String,
+    val un: String,
     @JsonProperty("dh")
     val dh: DHJson,
     @JsonProperty("user")
