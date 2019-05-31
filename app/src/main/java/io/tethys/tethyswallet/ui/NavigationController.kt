@@ -11,6 +11,7 @@ import io.tethys.tethyswallet.ui.join.JoinFragment
 import io.tethys.tethyswallet.ui.main.MainActivity
 import io.tethys.tethyswallet.ui.merger.MergerActivity
 import io.tethys.tethyswallet.ui.merger.MergerFragment
+import io.tethys.tethyswallet.ui.signer.SignerActivity
 import javax.inject.Inject
 
 class NavigationController @Inject constructor(
@@ -33,6 +34,10 @@ class NavigationController @Inject constructor(
 
     fun navigateToMergerActivity() {
         MergerActivity.start(activity)
+    }
+
+    fun navigateToSignerActivity() {
+        SignerActivity.start(activity)
     }
 
     private fun replaceFragment(fragment: Fragment) {
