@@ -24,6 +24,8 @@ class SignerActivity : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.nav_item_signer)
+
+        navigationController.navigateToSigner()
     }
 
     companion object {

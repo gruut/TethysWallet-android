@@ -98,7 +98,7 @@ class DrawerMenu @Inject constructor(
             navigateToMergerActivity()
         }),
         SIGNER(R.id.nav_item_signer, Unit::class, {
-
+            navigateToSignerActivity()
         }),
         AUTONYM(R.id.nav_item_autonym, JoinActivity::class, {
             navigateToJoinFromDrawer()

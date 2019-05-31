@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="PREF_KEY_IS_SIGNER"
+        android:title="I want to be a signer!" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:dependency="PREF_KEY_IS_SIGNER"
+        android:key="PREF_KEY_SIGNER_FOREGROUND"
+        android:summary="This feature will give you more rewards, but will consume more battery"
+        android:title="Always run in the background" />
+</PreferenceScreen>

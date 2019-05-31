@@ -12,6 +12,10 @@ kapt {
     generateStubs = true
 }
 
+configurations {
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+}
+
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.5.1-1'
@@ -77,6 +81,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_ver"
     implementation "com.google.android.material:material:$material_ver"
     implementation "androidx.legacy:legacy-support-v4:$legacy_support_v4_ver"
+    implementation "androidx.preference:preference:$pref_ver"
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_ver"

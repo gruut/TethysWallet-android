@@ -10,6 +10,7 @@ ext {
     material_ver = '1.0.0'
     legacy_support_v4_ver = '1.0.0'
     lifecycle_ver = '2.0.0'
+    pref_ver = '1.1.0-alpha05'
 
     rx_java_ver = '2.2.8'
     rx_android_ver = '2.1.1'

@@ -12,6 +12,7 @@ import io.tethys.tethyswallet.ui.main.MainActivity
 import io.tethys.tethyswallet.ui.merger.MergerActivity
 import io.tethys.tethyswallet.ui.merger.MergerFragment
 import io.tethys.tethyswallet.ui.signer.SignerActivity
+import io.tethys.tethyswallet.ui.signer.SignerFragment
 import javax.inject.Inject
 
 class NavigationController @Inject constructor(
@@ -84,5 +85,9 @@ class NavigationController @Inject constructor(
 
     fun navigateToMerger() {
         replaceFragment(MergerFragment.newInstance())
+    }
+
+    fun navigateToSigner() {
+        replaceFragment(SignerFragment.newInstance())
     }
 }

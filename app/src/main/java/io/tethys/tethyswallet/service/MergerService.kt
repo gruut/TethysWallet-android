@@ -108,7 +108,8 @@ class MergerService : DaggerService() {
                 dhKeyExchanged = (MsgUnpacker(it).body as MsgAccept).result
                 Timber.d(MsgUnpacker(it).toString())
 
-                // TODO  check if its signer and open the stream channel
+                // Signer Setup
+                if (prefHelper.isSigner) readyForSign()
             }
             .subscribe()
             .addTo(compositeDisposable)

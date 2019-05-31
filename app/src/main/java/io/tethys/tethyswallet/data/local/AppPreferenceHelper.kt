@@ -8,12 +8,14 @@ import io.tethys.tethyswallet.utils.ext.toBase64
 
 class AppPreferenceHelper constructor(
     val context: Context,
-    val prefFileName: String
+    prefFileName: String
 ) : PreferenceHelper {
     private val PREF_KEY_COMMON_NAME: String = "PREF_KEY_COMMON_NAME"
     private val PREF_KEY_PK: String = "PREF_KEY_PK"
     private val PREF_KEY_ENCRYPTED_SK: String = "PREF_KEY_ENCRYPTED_SK"
     private val PREF_KEY_IS_AUTONYM: String = "PREF_KEY_IS_AUTONYM"
+    private val PREF_KEY_IS_SIGNER: String = "PREF_KEY_IS_SIGNER"
+    private val PREF_KEY_SIGNER_FOREGROUND: String = "PREF_KEY_SIGNER_FOREGROUND"
     private val PREF_KEY_WORLD_ID: String = "PREF_KEY_WORLD_ID"
     private val PREF_KEY_CHAIN_ID: String = "PREF_KEY_CHAIN_ID"
 
@@ -42,6 +44,12 @@ class AppPreferenceHelper constructor(
     override var isAutonym: Boolean
         get() = prefs.getBoolean(PREF_KEY_IS_AUTONYM, false)
         set(value) = prefs.edit().putBoolean(PREF_KEY_IS_AUTONYM, value).apply()
+
+    override val isSigner: Boolean
+        get() = prefs.getBoolean(PREF_KEY_IS_SIGNER, false)
+
+    override val signerForeground: Boolean
+        get() = prefs.getBoolean(PREF_KEY_SIGNER_FOREGROUND, false)
 
     override var worldId: String?
         get() = prefs.getString(PREF_KEY_WORLD_ID, TethysConfigs.TEST_WORLD_ID)
