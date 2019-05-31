@@ -38,7 +38,7 @@ class GrpcService constructor(
                     )
                     when (this.status) {
                         Reply.Status.SUCCESS -> this.message.toByteArray()
-                        else -> throw Exception("Error Message From Merger: ${this.status.name}")
+                        else -> throw Exception("Error Message From Merger: [${this.status.name}] ${this.errInfo}")
                     }
                 }
         }.subscribeOn(schedulerProvider.io())
@@ -56,8 +56,7 @@ class GrpcService constructor(
                         MsgUnpacker(this.message.toByteArray())
                     )
                     when (this.status) {
-                        Reply.Status.SUCCESS -> this.message.toByteArray()
-                        else -> throw Exception("Error Message From Merger: ${this.status.name}")
+                        Reply.Status.SUCCESS -> this.message.toByteArray()else -> throw Exception("Error Message From Merger: [${this.status.name}] ${this.errInfo}")
                     }
                 }
         }.subscribeOn(schedulerProvider.io())
@@ -76,41 +75,41 @@ class GrpcService constructor(
                     )
                     when (this.status) {
                         Reply.Status.SUCCESS -> this.message.toByteArray()
-                        else -> throw Exception("Error Message From Merger: ${this.status.name}")
+                        else -> throw Exception("Error Message From Merger: [${this.status.name}] ${this.errInfo}")
                     }
                 }
         }.subscribeOn(schedulerProvider.io())
 
 
-    fun reqSsigService(base58Id: String): Observable<Message> = asObservable<Message> {
+    fun pushService(base58Id: String): Observable<Message> = asObservable<Message> {
         Identity.newBuilder().setSender(ByteString.copyFrom(base58Id.decodeBase58())).build()
             .apply {
-                TethysUserServiceGrpc.newStub(channel).reqSsigService(this, it)
+                TethysUserServiceGrpc.newStub(channel).pushService(this, it)
             }
     }.subscribeOn(schedulerProvider.io())
 
     fun terminateChannel() {
         channel.shutdownNow()
     }
-}
 
-inline fun <T> asObservable(
-    crossinline body: (StreamObserver<T>) -> Unit
-): Observable<T> {
-    return Observable.create { subscription ->
-        val observer = object : StreamObserver<T> {
-            override fun onNext(value: T) {
-                subscription.onNext(value)
-            }
+    inline fun <T> asObservable(
+        crossinline body: (StreamObserver<T>) -> Unit
+    ): Observable<T> {
+        return Observable.create { subscription ->
+            val observer = object : StreamObserver<T> {
+                override fun onNext(value: T) {
+                    subscription.onNext(value)
+                }
 
-            override fun onError(error: Throwable) {
-                subscription.onError(error)
-            }
+                override fun onError(error: Throwable) {
+                    subscription.onError(error)
+                }
 
-            override fun onCompleted() {
-                subscription.onComplete()
+                override fun onCompleted() {
+                    subscription.onComplete()
+                }
             }
+            body(observer)
         }
-        body(observer)
     }
 }

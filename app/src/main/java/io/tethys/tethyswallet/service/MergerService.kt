@@ -8,7 +8,6 @@ import dagger.android.DaggerService
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.zipWith
 import io.tethys.tethyswallet.Message
 import io.tethys.tethyswallet.Reply
@@ -108,7 +107,7 @@ class MergerService : DaggerService() {
             }.doOnSuccess {
                 dhKeyExchanged = (MsgUnpacker(it).body as MsgAccept).result
                 Timber.d(MsgUnpacker(it).toString())
-                
+
                 // TODO  check if its signer and open the stream channel
             }
             .subscribe()
@@ -116,7 +115,7 @@ class MergerService : DaggerService() {
     }
 
     private fun readyForSign() =
-        grpcService.reqSsigService(prefHelper.commonName!!)
+        grpcService.pushService(prefHelper.commonName!!)
             .flatMapSingle { msg: Message ->
                 val msgReqSuccess =
                     MsgUnpacker(msg.toByteArray(), sharedSecretKey).body as MsgReqSsig
