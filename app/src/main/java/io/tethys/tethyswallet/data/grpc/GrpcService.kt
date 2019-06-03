@@ -43,7 +43,7 @@ class GrpcService constructor(
                 }
         }.subscribeOn(schedulerProvider.io())
 
-    fun signerService(msg: MsgPacker): Single<ByteArray> =
+    fun signerService(msg: MsgPacker): Single<Reply.Status> =
         Single.fromCallable {
             Timber.d(msg.toString())
             TethysUserServiceGrpc.newBlockingStub(channel)
@@ -53,13 +53,13 @@ class GrpcService constructor(
                     Timber.d(
                         "[%s] %s",
                         this.status.toString(),
-                        MsgUnpacker(this.message.toByteArray())
+                        this.errInfo
                     )
-                    when (this.status) {
-                        Reply.Status.SUCCESS -> this.message.toByteArray()else -> throw Exception("Error Message From Merger: [${this.status.name}] ${this.errInfo}")
-                    }
+
+                    this.status
                 }
-        }.subscribeOn(schedulerProvider.io())
+        }.onErrorResumeNext(Single.just(Reply.Status.INVALID))
+            .subscribeOn(schedulerProvider.io())
 
     fun keyExService(msg: MsgPacker): Single<ByteArray> =
         Single.fromCallable {

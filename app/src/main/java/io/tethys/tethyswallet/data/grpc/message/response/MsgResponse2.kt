@@ -1,6 +1,5 @@
 package io.tethys.tethyswallet.data.grpc.message.response
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MsgResponse2(
@@ -9,10 +8,11 @@ data class MsgResponse2(
     @JsonProperty("dh")
     val dh: DHJson,
     @JsonProperty("merger")
-    val mergerInfo: MergerJson,
-    @JsonIgnore
-    override val merger: String = mergerInfo.id
+    val mergerInfo: MergerJson
 ) : MsgBody {
+    override val merger: String
+        get() = mergerInfo.id
+
     data class DHJson constructor(
         @JsonProperty("x") // __HEX_256__
         val x: String,

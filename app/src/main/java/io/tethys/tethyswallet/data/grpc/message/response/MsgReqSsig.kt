@@ -1,6 +1,5 @@
 package io.tethys.tethyswallet.data.grpc.message.response
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.tethys.tethyswallet.utils.ext.decodeBase58
 import io.tethys.tethyswallet.utils.ext.longBytes
@@ -11,12 +10,13 @@ data class MsgReqSsig(
     @JsonProperty("block")
     val block: Block,
     @JsonProperty("producer")
-    val producer: Producer,
-    @JsonIgnore
-    override val merger: String = producer.id,
-    @JsonIgnore
-    override val time: Int = block.time
+    val producer: Producer
 ) : MsgBody {
+    override val time: Int
+        get() = block.time
+    override val merger: String
+        get() = producer.id
+
     data class Block(
         @JsonProperty("id") // __BASE58_256__
         val id: String,

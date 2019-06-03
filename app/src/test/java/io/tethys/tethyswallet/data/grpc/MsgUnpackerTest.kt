@@ -5,6 +5,7 @@ import io.mockk.mockkStatic
 import io.tethys.tethyswallet.data.grpc.message.response.MsgChallenge
 import io.tethys.tethyswallet.data.grpc.message.response.MsgUnpacker
 import io.tethys.tethyswallet.utils.ext.encodeToBase58String
+import io.tethys.tethyswallet.utils.ext.getTimestamp
 import io.tethys.tethyswallet.utils.ext.toSha256
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -29,7 +30,7 @@ class MsgUnpackerTest {
         SecureRandom().nextBytes(nonce)
 
         val msg = TestMsgChallenge(
-            (System.currentTimeMillis() / 1000).toInt(),
+            getTimestamp(),
             user,
             merger.encodeToBase58String(),
             Base64.encodeToString(nonce, Base64.NO_WRAP)

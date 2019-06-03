@@ -3,6 +3,7 @@ package io.tethys.tethyswallet.data.grpc.message.request
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.tethys.tethyswallet.data.grpc.message.TypeMac
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
 import io.tethys.tethyswallet.data.local.PreferenceHelper
 import io.tethys.tethyswallet.ui.BaseApp
@@ -38,6 +39,7 @@ data class MsgSsig constructor(
 
     override fun setHeader() {
         this.header.msgType = TypeMsg.MSG_SSIG
+        this.header.macType = TypeMac.HMAC
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
         this.header.sender = signer.id

@@ -111,6 +111,7 @@ class MergerService : DaggerService() {
                 // Signer Setup
                 if (prefHelper.isSigner) readyForSign()
             }
+            .retry(3)
             .subscribe()
             .addTo(compositeDisposable)
     }
@@ -119,7 +120,7 @@ class MergerService : DaggerService() {
         grpcService.pushService(prefHelper.commonName!!)
             .flatMapSingle { msg: Message ->
                 val msgReqSuccess =
-                    MsgUnpacker(msg.toByteArray(), sharedSecretKey).body as MsgReqSsig
+                    MsgUnpacker(msg.message.toByteArray(), sharedSecretKey).body as MsgReqSsig
 
                 if (!msgReqSuccess.validateId()) {
                     Single.fromCallable {
@@ -134,9 +135,7 @@ class MergerService : DaggerService() {
                     msgReqSuccess.generateResponse()
                 }
             }
-            .flatMapSingle { msg: MsgPacker ->
-                grpcService.signerService(msg)
-            }
+            .flatMapSingle { msg: MsgPacker -> grpcService.signerService(msg) }
             .doOnComplete { Timber.d("Stream was closed") }
             .doOnError { throwable -> Timber.e(throwable) }
             .subscribe()

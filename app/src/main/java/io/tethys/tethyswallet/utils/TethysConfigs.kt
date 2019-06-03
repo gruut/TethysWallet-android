@@ -3,7 +3,7 @@ package io.tethys.tethyswallet.utils
 object TethysConfigs {
     const val IDENTIFIER: Byte = 'P'.toByte()
     const val MSG_VERSION: Byte = 0x01
-    const val TEST_WORLD_ID = "TETHYS"
+    const val TEST_WORLD_ID = "_TETHYS_"
     const val TEST_CHAIN_ID = "TSTCHAIN"
 
     const val IDENTIFIER_LENGTH: Int = 1
