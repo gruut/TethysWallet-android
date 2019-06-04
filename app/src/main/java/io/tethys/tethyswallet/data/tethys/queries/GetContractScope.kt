@@ -1,6 +1,9 @@
 package io.tethys.tethyswallet.data.tethys.queries
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 /**
  * 컨트랙트 변수를 받아오기 위한 쿼리
@@ -11,6 +14,7 @@ class GetContractScope(
     override val type: QueryType = QueryType.CONTRACT_SCOPE_GET,
     override val where: Request
 ) : QueryData() {
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     data class Request(
         val cid: String,            // 컨트랙트 아이디(필수)
         val pid: String? = null,    // 변수 아이디
@@ -20,6 +24,7 @@ class GetContractScope(
         val noTag: String? = null   // true/false
     ) : QueryData.Request
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     data class Result(
         @JsonProperty("var_name") val varName: String,
         @JsonProperty("var_value") val varValue: String,
@@ -28,5 +33,9 @@ class GetContractScope(
         @JsonProperty("up_time") val upTime: String,
         @JsonProperty("up_block") val upBlock: String,
         @JsonProperty("pid") val pid: String
-    ) : QueryData.Result
+    ) : QueryData.Result {
+        companion object {
+            fun getResultList(str: String): List<Result> = jacksonObjectMapper().readValue(str)
+        }
+    }
 }

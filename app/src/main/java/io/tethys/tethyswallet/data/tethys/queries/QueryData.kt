@@ -20,9 +20,5 @@ abstract class QueryData {
         TX_GET("tx.get"),
         BLOCK_SCAN("block.scan"),
         TX_SCAN("tx.scan");
-
-        companion object {
-            fun getByValue(value: String) = values().firstOrNull { it.value == value }
-        }
     }
 }

@@ -1,6 +1,9 @@
 package io.tethys.tethyswallet.data.tethys.queries
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 /**
  * 사용자 변수를 받아오기 위한 쿼리
@@ -11,6 +14,7 @@ class GetUserScope(
     override val type: QueryType = QueryType.USER_SCOPE_GET,
     override val where: Request
 ) : QueryData() {
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     data class Request(
         val uid: String,            // 사용자 아이디(필수) (= var_owner)
         val pid: String? = null,    // 변수 아이디
@@ -20,6 +24,7 @@ class GetUserScope(
         val noTag: String? = null   // true/false
     ) : QueryData.Request
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     data class Result(
         @JsonProperty("var_name") val varName: String,
         @JsonProperty("var_value") val varValue: String,
@@ -28,5 +33,9 @@ class GetUserScope(
         @JsonProperty("up_block") val upBlock: String,
         @JsonProperty("tag") val tag: String,
         @JsonProperty("pid") val pid: String
-    ) : QueryData.Result
+    ) : QueryData.Result {
+        companion object {
+            fun getResultList(str: String): List<Result> = jacksonObjectMapper().readValue(str)
+        }
+    }
 }

@@ -45,6 +45,7 @@ class MsgUnpacker(
         TypeMsg.MSG_ACCEPT -> getMapper().readValue(this, MsgAccept::class.java)
         TypeMsg.MSG_REQ_SSIG -> getMapper().readValue(this, MsgReqSsig::class.java)
         TypeMsg.MSG_RES_TX_CHECK -> getMapper().readValue(this, MsgResTxCheck::class.java)
+        TypeMsg.MSG_RESULT -> getMapper().readValue(this, MsgResult::class.java)
         else -> null
     }
 

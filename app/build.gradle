@@ -121,6 +121,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_ver"
     implementation "com.fasterxml.jackson.core:jackson-core:$jackson_ver"
     implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_ver"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_ver"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$jackson_ver"
 
     testImplementation "org.robolectric:robolectric:$roboletric_ver"
