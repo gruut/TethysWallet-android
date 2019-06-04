@@ -1,8 +1,8 @@
-package io.tethys.tethyswallet.data.grpc
+package io.tethys.tethyswallet.data
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.request.MsgTx
-import io.tethys.tethyswallet.data.grpc.message.request.contracts.NonAnonymUserJoin
+import io.tethys.tethyswallet.data.tethys.contracts.NonAnonymUserJoin
 import io.tethys.tethyswallet.utils.ext.getTimestamp
 import org.junit.Test
 

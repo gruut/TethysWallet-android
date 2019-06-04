@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.TypeMsg
-import io.tethys.tethyswallet.data.grpc.message.request.contracts.StandardContractInput
+import io.tethys.tethyswallet.data.tethys.contracts.StandardContractInput
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgTx constructor(

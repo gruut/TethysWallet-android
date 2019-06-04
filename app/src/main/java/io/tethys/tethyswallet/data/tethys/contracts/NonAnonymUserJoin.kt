@@ -1,4 +1,4 @@
-package io.tethys.tethyswallet.data.grpc.message.request.contracts
+package io.tethys.tethyswallet.data.tethys.contracts
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
