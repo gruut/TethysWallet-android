@@ -10,21 +10,21 @@ import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgSsig constructor(
-    @JsonProperty("block")
+    @get:JsonProperty("block")
     val block: Block,
-    @JsonProperty("signer")
+    @get:JsonProperty("signer")
     val signer: Signer
 ) : MsgPacker() {
 
     data class Block(
-        @JsonProperty("id") // __BASE58_256__
+        @get:JsonProperty("id") // __BASE58_256__
         val id: String
     )
 
     data class Signer(
-        @JsonProperty("id") // __BASE58_256__
+        @get:JsonProperty("id") // __BASE58_256__
         val id: String,
-        @JsonProperty("sig") // __BASE64_SIG__
+        @get:JsonProperty("sig") // __BASE64_SIG__
         val sig: String
     )
 
@@ -43,16 +43,10 @@ data class MsgSsig constructor(
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
         this.header.sender = signer.id
-        this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
-    }
-
-    override fun jsonToByteArray(): ByteArray {
-        with(ObjectMapper()) {
-            return writeValueAsBytes(this@MsgSsig)
-        }
+        this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
 
     override fun toString(): String {
-        return header.toString() + "\n" + String(jsonToByteArray())
+        return header.toString() + "\n" + String(serialize())
     }
 }

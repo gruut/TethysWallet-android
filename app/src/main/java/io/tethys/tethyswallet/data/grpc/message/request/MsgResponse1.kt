@@ -9,28 +9,28 @@ import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgResponse1 constructor(
-    @JsonProperty("time") // __TIMESTAMP__
+    @get:JsonProperty("time") // __TIMESTAMP__
     val time: Int,
-    @JsonProperty("un") // __BASE64_256__
+    @get:JsonProperty("un") // __BASE64_256__
     val un: String,
-    @JsonProperty("dh")
+    @get:JsonProperty("dh")
     val dh: DHJson,
-    @JsonProperty("user")
+    @get:JsonProperty("user")
     val user: UserJson
 ) : MsgPacker() {
     data class DHJson constructor(
-        @JsonProperty("x") // __HEX_256__
+        @get:JsonProperty("x") // __HEX_256__
         val x: String,
-        @JsonProperty("y") // __HEX_256__
+        @get:JsonProperty("y") // __HEX_256__
         val y: String
     )
 
     data class UserJson constructor(
-        @JsonProperty("id") // __BASE58_256__
+        @get:JsonProperty("id") // __BASE58_256__
         val id: String,
-        @JsonProperty("pk") // __CERT_PEM__ / __PK__
+        @get:JsonProperty("pk") // __CERT_PEM__ / __PK__
         val pk: String,
-        @JsonProperty("sig") // __BASE64_SIG__
+        @get:JsonProperty("sig") // __BASE64_SIG__
         val sig: String
     )
 
@@ -48,16 +48,10 @@ data class MsgResponse1 constructor(
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
         this.header.sender = user.id
-        this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
-    }
-
-    override fun jsonToByteArray(): ByteArray {
-        with(ObjectMapper()) {
-            return writeValueAsBytes(this@MsgResponse1)
-        }
+        this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
 
     override fun toString(): String {
-        return header.toString() + "\n" + String(jsonToByteArray())
+        return header.toString() + "\n" + String(serialize())
     }
 }

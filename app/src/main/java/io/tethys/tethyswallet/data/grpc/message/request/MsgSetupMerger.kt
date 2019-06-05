@@ -9,9 +9,9 @@ import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgSetupMerger constructor(
-    @JsonProperty("enc_sk") // PKCS8 PEM
+    @get:JsonProperty("enc_sk") // PKCS8 PEM
     val encryptedSecretKey: String,
-    @JsonProperty("cert") // x509 PEM
+    @get:JsonProperty("cert") // x509 PEM
     val certificate: String
 ) : MsgPacker() {
     @JsonIgnore
@@ -25,18 +25,12 @@ data class MsgSetupMerger constructor(
 
     override fun setHeader() {
         this.header.msgType = TypeMsg.MSG_SETUP_MERGER
-        this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
+        this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
     }
 
-    override fun jsonToByteArray(): ByteArray {
-        with(ObjectMapper()) {
-            return writeValueAsBytes(this@MsgSetupMerger)
-        }
-    }
-
     override fun toString(): String {
-        return header.toString() + "\n" + String(jsonToByteArray())
+        return header.toString() + "\n" + String(serialize())
     }
 }

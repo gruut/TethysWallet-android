@@ -10,13 +10,13 @@ import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgSuccess constructor(
-    @JsonProperty("time") // __TIMESTAMP__
+    @get:JsonProperty("time") // __TIMESTAMP__
     val time: Int,
-    @JsonProperty("user") // __BASE58_256__
+    @get:JsonProperty("user") // __BASE58_256__
     val user: String,
-    @JsonProperty("mode") // __ENUM_STRING__
+    @get:JsonProperty("mode") // __ENUM_STRING__
     val mode: String,
-    @JsonProperty("val") // __BOOLEAN__
+    @get:JsonProperty("val") // __BOOLEAN__
     val result: Boolean
 ) : MsgPacker() {
     @JsonIgnore
@@ -34,16 +34,10 @@ data class MsgSuccess constructor(
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
         this.header.sender = user
-        this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
-    }
-
-    override fun jsonToByteArray(): ByteArray {
-        with(ObjectMapper()) {
-            return writeValueAsBytes(this@MsgSuccess)
-        }
+        this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
 
     override fun toString(): String {
-        return header.toString() + "\n" + String(jsonToByteArray())
+        return header.toString() + "\n" + String(serialize())
     }
 }

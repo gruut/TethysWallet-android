@@ -1,7 +1,6 @@
 package io.tethys.tethyswallet.data.grpc.message.request
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializerProvider
@@ -32,17 +31,11 @@ data class MsgQuery constructor(
         this.header.macType = TypeMac.HMAC
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
-        this.header.totalLength = TethysConfigs.HEADER_LENGTH + jsonToByteArray().serialize().size
-    }
-
-    override fun jsonToByteArray(): ByteArray {
-        with(ObjectMapper()) {
-            return writeValueAsBytes(this@MsgQuery)
-        }
+        this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
 
     override fun toString(): String {
-        return header.toString() + "\n" + String(jsonToByteArray())
+        return header.toString() + "\n" + String(serialize())
     }
 
     class CustomSerializer : StdSerializer<MsgQuery>(

@@ -4,6 +4,7 @@ import android.util.Base64
 import io.mockk.mockkStatic
 import io.tethys.tethyswallet.data.grpc.message.response.MsgChallenge
 import io.tethys.tethyswallet.data.grpc.message.response.MsgUnpacker
+import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.ext.encodeToBase58String
 import io.tethys.tethyswallet.utils.ext.getTimestamp
 import io.tethys.tethyswallet.utils.ext.toSha256
@@ -19,6 +20,7 @@ class MsgUnpackerTest {
 
     @Before
     fun setup() {
+        mockkStatic(BaseApp::class)
         mockkStatic(Base64::class)
     }
 
@@ -35,8 +37,8 @@ class MsgUnpackerTest {
             merger.encodeToBase58String(),
             Base64.encodeToString(nonce, Base64.NO_WRAP)
         )
-
-        val target = MsgUnpacker(msg.jsonToByteArray()).body as MsgChallenge
+        
+        val target = MsgUnpacker(msg.toByteArray(null)).body as MsgChallenge
         assertEquals(target.user, user)
         assertEquals(target.merger, merger.encodeToBase58String())
         assertEquals(target.mergerNonce, Base64.encodeToString(nonce, Base64.NO_WRAP))

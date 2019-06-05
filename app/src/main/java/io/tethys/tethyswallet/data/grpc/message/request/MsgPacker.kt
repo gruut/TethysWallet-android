@@ -16,19 +16,19 @@ abstract class MsgPacker {
 
     abstract var sharedSecretKey: ByteArray?
     abstract fun setHeader()
-    abstract fun jsonToByteArray(): ByteArray
 
-    fun ByteArray.serialize(): ByteArray = when (header.serializationType) {
+    fun serialize(): ByteArray = when (header.serializationType) {
         TypeSerialization.CBOR -> with(ObjectMapper(CBORFactory())) {
-            writeValueAsBytes(this@serialize)
+            writeValueAsBytes(this@MsgPacker)
         }
         TypeSerialization.NONE -> with(ObjectMapper()) {
-            writeValueAsBytes(this@serialize)
+            writeValueAsBytes(this@MsgPacker)
         }
         else -> with(ObjectMapper()) {
-            writeValueAsBytes(this@serialize)
+            writeValueAsBytes(this@MsgPacker)
         }
     }
+
 
     fun ByteArray.generateHmac(key: ByteArray): ByteArray? =
         when (header.macType) {
@@ -37,7 +37,7 @@ abstract class MsgPacker {
         }
 
     fun toByteArray(key: ByteArray?): ByteArray {
-        val result = header.toByteArray() + jsonToByteArray().serialize()
+        val result = header.toByteArray() + serialize()
         key?.let { return result + result.generateHmac(key)!! } ?: return result
     }
 
