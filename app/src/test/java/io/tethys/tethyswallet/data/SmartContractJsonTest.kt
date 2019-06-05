@@ -1,6 +1,6 @@
 package io.tethys.tethyswallet.data
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.tethys.tethyswallet.data.grpc.message.request.MsgTx
 import io.tethys.tethyswallet.data.tethys.contracts.NonAnonymUserJoin
 import io.tethys.tethyswallet.utils.ext.getTimestamp
@@ -9,8 +9,7 @@ import org.junit.Test
 class SmartContractJsonTest {
 
     @Test
-    fun JsonSerializeTest() {
-
+    fun jsonSerializeTest() {
         val input =
             NonAnonymUserJoin(
                 "timestamp",
@@ -46,6 +45,6 @@ class SmartContractJsonTest {
                 )
             )
         )
-        val string = ObjectMapper().writeValueAsString(msgTx)
+        val string = jacksonObjectMapper().writeValueAsString(msgTx)
     }
 }

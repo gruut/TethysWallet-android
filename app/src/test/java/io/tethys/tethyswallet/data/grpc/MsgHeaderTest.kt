@@ -15,7 +15,7 @@ class MsgHeaderTest {
     fun convertHeaderTest() {
         val sender = "test".toSha256()
 
-        val header: MsgHeader = MsgHeader()
+        val header = MsgHeader()
         header.msgType = TypeMsg.MSG_JOIN
         header.macType = TypeMac.SHA256
         header.serializationType = TypeSerialization.CBOR

@@ -17,7 +17,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class MsgResultTest {
-
     private val header: MsgHeader = MsgHeader()
     private val testString = "{\n" +
             "  \"name\": [\n" +
