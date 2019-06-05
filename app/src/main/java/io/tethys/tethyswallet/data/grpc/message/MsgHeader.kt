@@ -38,16 +38,19 @@ class MsgHeader(
         totalLength = ByteBuffer.wrap(byteArray, offset, MSG_LENGTH_SIZE).int
         offset += MSG_LENGTH_SIZE
 
-        worldId = String(byteArray.copyOfRange(offset, offset + WORLD_ID_TYPE_SIZE))
+        worldId = String(byteArray.copyOfRange(offset, offset + WORLD_ID_TYPE_SIZE)).trim()
         offset += WORLD_ID_TYPE_SIZE
 
-        chainId = String(byteArray.copyOfRange(offset, offset + CHAIN_ID_TYPE_SIZE))
+        chainId = String(byteArray.copyOfRange(offset, offset + CHAIN_ID_TYPE_SIZE)).trim()
         offset += CHAIN_ID_TYPE_SIZE
 
         sender = byteArray.copyOfRange(offset, offset + SENDER_ID_TYPE_SIZE).encodeToBase58String()
     }
 
     fun toByteArray(): ByteArray {
+        val paddedWorldId = worldId?.padEnd(WORLD_ID_TYPE_SIZE, ' ')
+        val paddedChainId = chainId?.padEnd(CHAIN_ID_TYPE_SIZE, ' ')
+
         val buffer = ByteBuffer.allocate(HEADER_LENGTH)
             .put(identifier)
             .put(msgVersion)
@@ -56,8 +59,8 @@ class MsgHeader(
             .put(serializationType.type)
             .put(dummy)
             .putInt(totalLength)
-            .put(worldId?.toByteArray(Charsets.UTF_8) ?: ByteArray(WORLD_ID_TYPE_SIZE))
-            .put(chainId?.toByteArray(Charsets.UTF_8) ?: ByteArray(CHAIN_ID_TYPE_SIZE))
+            .put(paddedWorldId?.toByteArray() ?: ByteArray(WORLD_ID_TYPE_SIZE))
+            .put(paddedChainId?.toByteArray() ?: ByteArray(CHAIN_ID_TYPE_SIZE))
             .put(sender?.decodeBase58() ?: ByteArray(SENDER_ID_TYPE_SIZE))
 
         return buffer.array()
