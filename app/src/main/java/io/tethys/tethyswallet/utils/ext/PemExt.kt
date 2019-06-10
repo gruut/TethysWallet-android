@@ -15,7 +15,8 @@ import java.security.cert.X509Certificate
 enum class PemType(val value: String) {
     CERTIFICATE_REQUEST("CERTIFICATE REQUEST"),
     CERTIFICATE("CERTIFICATE"),
-    ENCRYPTED_PRIVATE_KEY("ENCRYPTED PRIVATE KEY")
+    ENCRYPTED_PRIVATE_KEY("ENCRYPTED PRIVATE KEY"),
+    PUBLIC_KEY("PUBLIC KEY")
 }
 
 fun ByteArray.toPemString(type: PemType): String {

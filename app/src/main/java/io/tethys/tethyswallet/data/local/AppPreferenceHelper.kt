@@ -17,6 +17,7 @@ class AppPreferenceHelper constructor(
     private val PREF_KEY_IS_SIGNER: String = "PREF_KEY_IS_SIGNER"
     private val PREF_KEY_SIGNER_FOREGROUND: String = "PREF_KEY_SIGNER_FOREGROUND"
     private val PREF_KEY_WORLD_ID: String = "PREF_KEY_WORLD_ID"
+    private val PREF_KEY_WORLD_CREATOR: String = "PREF_KEY_WORLD_CREATOR"
     private val PREF_KEY_CHAIN_ID: String = "PREF_KEY_CHAIN_ID"
 
     private val prefs = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
@@ -54,6 +55,11 @@ class AppPreferenceHelper constructor(
     override var worldId: String?
         get() = prefs.getString(PREF_KEY_WORLD_ID, TethysConfigs.TEST_WORLD_ID)
         set(value) = prefs.edit().putString(PREF_KEY_WORLD_ID, value).apply()
+
+    override var worldCreator: String?
+        get() = prefs.getString(PREF_KEY_WORLD_CREATOR, null)
+        set(value) = prefs.edit().putString(PREF_KEY_WORLD_CREATOR, value).apply()
+
     override var chainId: String?
         get() = prefs.getString(PREF_KEY_CHAIN_ID, TethysConfigs.TEST_CHAIN_ID)
         set(value) = prefs.edit().putString(PREF_KEY_CHAIN_ID, value).apply()

@@ -8,5 +8,6 @@ interface PreferenceHelper {
     val isSigner: Boolean
     val signerForeground: Boolean
     var worldId: String?
+    var worldCreator: String?
     var chainId: String?
 }

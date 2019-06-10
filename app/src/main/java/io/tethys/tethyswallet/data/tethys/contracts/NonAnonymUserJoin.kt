@@ -14,8 +14,9 @@ data class NonAnonymUserJoin(
     val iscCode: String,    // __TINYTEXT__     indurstrial standard code
     val ageLimit: Int,      // __INT__          age limit for service
     val location: String,   // __TEXT__         address
-    val sigma: String       // __BASE64__       signature by authority
-) : StandardContractInput {
+    val sigma: String,      // __BASE64__       signature by authority
+    override val contractType: ContractType = ContractType.NON_ANONYMOUS_USER_JOIN
+) : StandardContractInput() {
     class CustomSerializer : StdSerializer<NonAnonymUserJoin>(
         NonAnonymUserJoin::class.java
     ) {

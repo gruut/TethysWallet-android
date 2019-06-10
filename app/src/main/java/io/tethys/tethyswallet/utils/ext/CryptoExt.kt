@@ -10,8 +10,8 @@ import org.spongycastle.util.encoders.Hex
 import java.math.BigInteger
 import java.security.*
 
-fun ByteArray.toSha256Hex(): ByteArray {
-    return this.toSha256().encodeHex()
+fun ByteArray.toSha256Hex(): String {
+    return this.toSha256().encodeHex().toString()
 }
 
 fun ByteArray.toSha256(): ByteArray {

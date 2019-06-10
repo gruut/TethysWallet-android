@@ -28,7 +28,7 @@ data class MsgTx constructor(
         @get:JsonProperty("cid") // __CONTRACT_ID__
         val contractId: String,
         @get:JsonProperty("receiver") // __BASE58_256__
-        val receiver: String,
+        val receiver: String?,
         @get:JsonProperty("fee") // __DECIMAL__
         val fee: Int,
         @get:JsonProperty("input")
