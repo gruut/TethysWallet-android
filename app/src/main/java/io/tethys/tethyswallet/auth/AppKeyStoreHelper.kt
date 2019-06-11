@@ -5,7 +5,7 @@ import io.reactivex.Single
 import io.tethys.tethyswallet.data.local.PreferenceHelper
 import io.tethys.tethyswallet.ui.BaseApp
 import io.tethys.tethyswallet.utils.CryptoConstants.ALIAS_TETHYS
-import io.tethys.tethyswallet.utils.CryptoConstants.CURVE_SECP256R1
+import io.tethys.tethyswallet.utils.CryptoConstants.CURVE_SECP256K1
 import io.tethys.tethyswallet.utils.CryptoConstants.ECDH
 import io.tethys.tethyswallet.utils.CryptoConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE
 import io.tethys.tethyswallet.utils.CryptoConstants.SHA256withECDSA
@@ -51,7 +51,7 @@ class AppKeyStoreHelper @Inject constructor(
         return Completable.fromAction {
             Security.insertProviderAt(BouncyCastleProvider(), 1)
             with(ECKeyPairGenerator()) {
-                val x9ECParameters = SECNamedCurves.getByName(CURVE_SECP256R1)
+                val x9ECParameters = SECNamedCurves.getByName(CURVE_SECP256K1)
                 val params = ECDomainParameters(
                     x9ECParameters.curve,
                     x9ECParameters.g,
@@ -146,9 +146,9 @@ class AppKeyStoreHelper @Inject constructor(
 
     override fun verifyWithCert(data: ByteArray, signature: String, cert: String): Single<Boolean> =
         Single.fromCallable {
-            val cert = cert.toX509Cert()
+            val certificate = cert.toX509Cert()
             with(Signature.getInstance(SHA256withECDSA)) {
-                initVerify(cert)
+                initVerify(certificate)
                 update(data)
                 verify(signature.fromBase64())
             }

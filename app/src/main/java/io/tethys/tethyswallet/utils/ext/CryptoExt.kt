@@ -47,7 +47,7 @@ fun ByteArray?.hexToPrivateKey(): PrivateKey {
     this ?: throw IllegalArgumentException("Illegal private key format")
 
     Security.insertProviderAt(BouncyCastleProvider(), 1)
-    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256R1)
+    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256K1)
     val bigInt = BigInteger(String(this), 16)
 
     val prvKeySpec = ECPrivateKeySpec(bigInt, ecParameterSpec)
@@ -58,7 +58,7 @@ fun ByteArray?.hexToPublicKey(): PublicKey {
     this ?: throw IllegalArgumentException("Illegal public key format")
 
     Security.insertProviderAt(BouncyCastleProvider(), 1)
-    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256R1)
+    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256K1)
     val curve = ecParameterSpec.curve
     val point = curve.decodePoint(Hex.decode(this))
 
@@ -69,7 +69,7 @@ fun ByteArray?.hexToPublicKey(): PublicKey {
 fun ByteArray?.hexToPointPair(): Pair<String, String> {
     this ?: throw IllegalArgumentException("Illegal point format")
 
-    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256R1)
+    val ecParameterSpec = ECNamedCurveTable.getParameterSpec(CryptoConstants.CURVE_SECP256K1)
     val curve = ecParameterSpec.curve
     val point = curve.decodePoint(Hex.decode(this))
 
