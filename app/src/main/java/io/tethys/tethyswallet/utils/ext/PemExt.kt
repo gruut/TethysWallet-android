@@ -1,11 +1,16 @@
 package io.tethys.tethyswallet.utils.ext
 
+import org.spongycastle.asn1.pkcs.PrivateKeyInfo
+import org.spongycastle.jce.interfaces.ECPrivateKey
+import org.spongycastle.openssl.PEMParser
 import org.spongycastle.openssl.PKCS8Generator
+import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.spongycastle.openssl.jcajce.JcaPKCS8Generator
 import org.spongycastle.openssl.jcajce.JceOpenSSLPKCS8EncryptorBuilder
 import org.spongycastle.util.io.pem.PemObject
 import org.spongycastle.util.io.pem.PemWriter
 import java.io.ByteArrayInputStream
+import java.io.StringReader
 import java.io.StringWriter
 import java.security.PrivateKey
 import java.security.SecureRandom
@@ -58,4 +63,15 @@ fun String.toX509Cert(): X509Certificate? {
         ) as X509Certificate
     }
     return null
+}
+
+fun String.toPrivateKey(): ECPrivateKey? {
+    val pemParser = PEMParser(StringReader(this))
+    val pemObject = pemParser.readObject()
+    val converter = JcaPEMKeyConverter().setProvider("SC")
+    return if (pemObject is PrivateKeyInfo) {
+        converter.getPrivateKey(pemObject) as ECPrivateKey?
+    } else {
+        null
+    }
 }
