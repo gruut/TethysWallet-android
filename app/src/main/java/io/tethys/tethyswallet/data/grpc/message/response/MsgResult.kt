@@ -17,7 +17,7 @@ import io.tethys.tethyswallet.utils.ext.getTimestamp
 @JsonDeserialize(using = MsgResult.CustomDeserializer::class)
 data class MsgResult(
     @JsonIgnore
-    override val time: Int,
+    override val time: String,
     @JsonIgnore
     override val merger: String,
     val jsonStr: String
@@ -80,7 +80,7 @@ data class MsgResult(
             }
 
             return MsgResult(
-                getTimestamp(),
+                getTimestamp().toString(),
                 "",
                 objectMapper.writeValueAsString(pairList)
             )

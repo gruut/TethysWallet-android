@@ -10,7 +10,7 @@ import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgResponse1 constructor(
     @get:JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    val time: String,
     @get:JsonProperty("un") // __BASE64_256__
     val un: String,
     @get:JsonProperty("dh")

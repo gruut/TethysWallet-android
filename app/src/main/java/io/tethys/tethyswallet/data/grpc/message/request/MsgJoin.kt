@@ -10,7 +10,7 @@ import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgJoin constructor(
     @get:JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    val time: String,
     @get:JsonProperty("world") // __ALPHA_8__
     val world: String,
     @get:JsonProperty("chain") // __ALPHA_8__

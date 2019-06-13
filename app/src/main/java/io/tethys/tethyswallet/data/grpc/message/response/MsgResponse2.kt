@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MsgResponse2(
     @JsonProperty("time") // __TIMESTAMP__
-    override val time: Int,
+    override val time: String,
     @JsonProperty("dh")
     val dh: DHJson,
     @JsonProperty("merger")

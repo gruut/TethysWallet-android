@@ -75,7 +75,7 @@ class MergerService : DaggerService() {
 
     private fun connectWithMerger() {
         val msgJoin = MsgJoin(
-            getTimestamp(),
+            getTimestamp().toString(),
             TethysConfigs.TEST_WORLD_ID,
             TethysConfigs.TEST_CHAIN_ID,
             prefHelper.commonName!!,
@@ -126,7 +126,7 @@ class MergerService : DaggerService() {
                     Single.fromCallable {
                         MsgError(
                             prefHelper.commonName!!,
-                            getTimestamp(),
+                            getTimestamp().toString(),
                             Reply.Status.INVALID,
                             "Invalid block id in MSG_REQ_SSIG"
                         )
@@ -156,7 +156,7 @@ class MergerService : DaggerService() {
                 )
             ) { cert, signature ->
                 MsgResponse1(
-                    time,
+                    time.toString(),
                     nonce,
                     MsgResponse1.DHJson(point.first, point.second),
                     MsgResponse1.UserJson(
@@ -174,7 +174,7 @@ class MergerService : DaggerService() {
                     second.un.fromBase64() +
                     third.dh.x.toByteArray(Charsets.UTF_8) +
                     third.dh.y.toByteArray(Charsets.UTF_8) +
-                    third.time.longBytes(),
+                    third.time.toInt().longBytes(),
             third.mergerInfo.sig,
             third.mergerInfo.cert
         ).flatMap { result ->
@@ -192,7 +192,7 @@ class MergerService : DaggerService() {
             sharedSecretKey = t.second
 
             MsgSuccess(
-                getTimestamp(),
+                getTimestamp().toString(),
                 prefHelper.commonName!!,
                 TypeMode.SIGNER.mode,
                 t.first

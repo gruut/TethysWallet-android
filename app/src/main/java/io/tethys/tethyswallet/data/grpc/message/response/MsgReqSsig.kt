@@ -12,7 +12,7 @@ data class MsgReqSsig(
     @JsonProperty("producer")
     val producer: Producer
 ) : MsgBody {
-    override val time: Int
+    override val time: String
         get() = block.time
     override val merger: String
         get() = producer.id
@@ -21,7 +21,7 @@ data class MsgReqSsig(
         @JsonProperty("id") // __BASE58_256__
         val id: String,
         @JsonProperty("time") // __TIMESTAMP__
-        val time: Int,
+        val time: String,
         @JsonProperty("world") // __ALPHA_8__
         val world: String,
         @JsonProperty("chain") // __ALPHA_8__
@@ -47,8 +47,8 @@ data class MsgReqSsig(
 
     fun validateId(): Boolean =
         Arrays.equals(
-            block.id.decodeBase58(),
-            (producer.id.decodeBase58() + block.time.longBytes() +
+            block.id.decodeBase58(), (producer.id.decodeBase58() +
+                    block.time.toInt().longBytes() +
                     block.world.toByteArray(Charsets.UTF_8) + block.chain.toByteArray(Charsets.UTF_8) +
                     block.height.longBytes() + block.previd.decodeBase58()
                     ).toSha256()

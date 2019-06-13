@@ -66,7 +66,7 @@ class MsgUnpacker(
     private fun checkSender(): Boolean = body?.let { header.sender.equals(body.merger) } ?: false
 
     private fun checkTime(): Boolean =
-        body?.let { (body.time + MSG_EXP_TIME) > getTimestamp() } ?: false
+        body?.let { (body.time.toInt() + MSG_EXP_TIME) > getTimestamp() } ?: false
 
     fun checkValidity(): Reply.Status {
         if (!checkTime()) return Reply.Status.ECDH_TIMEOUT

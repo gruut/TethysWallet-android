@@ -10,7 +10,7 @@ import io.tethys.tethyswallet.utils.TethysConfigs
 
 data class MsgReqTxCheck constructor(
     @get:JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    val time: String,
     @get:JsonProperty("user") // __BASE58_256__
     val user: String,
     @get:JsonProperty("world") // __ALPHA_8__

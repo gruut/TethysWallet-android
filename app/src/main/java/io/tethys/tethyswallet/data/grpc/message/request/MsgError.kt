@@ -14,7 +14,7 @@ data class MsgError constructor(
     @get:JsonProperty("sender") // __BASE58_256__
     val sender: String,
     @get:JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    val time: String,
     @get:JsonProperty("code") // __ERROR_CODE__
     val code: Reply.Status,
     @get:JsonProperty("info") // *

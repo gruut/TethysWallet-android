@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MsgResTxCheck(
     @JsonProperty("time") // __TIMESTAMP__
-    override val time: Int,
+    override val time: String,
     @JsonProperty("block") // __BASE64__
     val block: String,
     @JsonProperty("confirm") // boolean

@@ -11,7 +11,7 @@ data class MsgTx constructor(
     @get:JsonProperty("txid") // __BASE58_256__
     val txid: String,
     @get:JsonProperty("time") // __TIMESTAMP__
-    val time: Int,
+    val time: String,
     @get:JsonProperty("world") // __ALPHA_8__
     val world: String,
     @get:JsonProperty("chain") // __ALPHA_8__
