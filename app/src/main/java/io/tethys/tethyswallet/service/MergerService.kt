@@ -202,7 +202,7 @@ class MergerService : DaggerService() {
         }
 
     private fun MsgReqSsig.generateResponse(): Single<MsgSsig> =
-        keyStoreHelper.signWithECKey(
+        keyStoreHelper.aggGamSign(
             (this.block.id.decodeBase58() +
                     this.block.txroot.fromBase64() +
                     this.block.usroot.fromBase64() +

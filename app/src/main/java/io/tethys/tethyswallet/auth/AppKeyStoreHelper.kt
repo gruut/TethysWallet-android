@@ -144,6 +144,15 @@ class AppKeyStoreHelper @Inject constructor(
             }
         }
 
+    override fun aggGamSign(data: ByteArray): Single<String> =
+        Single.fromCallable {
+            SignatureHelper.sign(
+                prefHelper.ecSecretKey!!,
+                prefHelper.ecPublicKey!!,
+                data
+            )
+        }
+
     override fun verifyWithCert(data: ByteArray, signature: String, cert: String): Single<Boolean> =
         Single.fromCallable {
             val certificate = cert.toX509Cert()

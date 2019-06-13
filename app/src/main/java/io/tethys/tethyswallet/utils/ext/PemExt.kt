@@ -1,6 +1,8 @@
 package io.tethys.tethyswallet.utils.ext
 
 import org.spongycastle.asn1.pkcs.PrivateKeyInfo
+import org.spongycastle.cert.X509CertificateHolder
+import org.spongycastle.cert.jcajce.JcaX509CertificateConverter
 import org.spongycastle.jce.interfaces.ECPrivateKey
 import org.spongycastle.openssl.PEMParser
 import org.spongycastle.openssl.PKCS8Generator
@@ -9,12 +11,10 @@ import org.spongycastle.openssl.jcajce.JcaPKCS8Generator
 import org.spongycastle.openssl.jcajce.JceOpenSSLPKCS8EncryptorBuilder
 import org.spongycastle.util.io.pem.PemObject
 import org.spongycastle.util.io.pem.PemWriter
-import java.io.ByteArrayInputStream
 import java.io.StringReader
 import java.io.StringWriter
 import java.security.PrivateKey
 import java.security.SecureRandom
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 
 enum class PemType(val value: String) {
@@ -54,13 +54,11 @@ fun PrivateKey.toPemString(password: String): String {
 
 fun String.toX509Cert(): X509Certificate? {
     if (this.trim().isNotEmpty()) {
-        val input = this.replace("-----BEGIN CERTIFICATE-----", "")
-            .replace("-----END CERTIFICATE-----", "")
-
-        val cf = CertificateFactory.getInstance("X509", "BC")
-        return cf.generateCertificate(
-            ByteArrayInputStream(input.fromBase64())
-        ) as X509Certificate
+        val pemParser = PEMParser(StringReader(this))
+        val pemObject = pemParser.readObject()
+        val converter = JcaX509CertificateConverter().setProvider("SC")
+        val certHolder = pemObject as X509CertificateHolder
+        return converter.getCertificate(certHolder)
     }
     return null
 }
