@@ -150,8 +150,8 @@ class MergerService : DaggerService() {
                 keyStoreHelper.signWithECKey(
                     this.mergerNonce.fromBase64() +
                             nonce.fromBase64() +
-                            point.first.toByteArray() +
-                            point.second.toByteArray() +
+                            point.first.toByteArray().encodeHex() +
+                            point.second.toByteArray().encodeHex() +
                             time.longBytes()
                 )
             ) { cert, signature ->
@@ -172,16 +172,16 @@ class MergerService : DaggerService() {
         keyStoreHelper.verifyWithCert( // verify merger's signature
             first.mergerNonce.fromBase64() +
                     second.un.fromBase64() +
-                    third.dh.x.toByteArray(Charsets.UTF_8) +
-                    third.dh.y.toByteArray(Charsets.UTF_8) +
+                    third.dh.x.toByteArray().decodeHex() +
+                    third.dh.y.toByteArray().decodeHex() +
                     third.time.toInt().longBytes(),
             third.mergerInfo.sig,
             third.mergerInfo.cert
         ).flatMap { result ->
             // point 에서 public key 추출
             val mergerPubKey = Pair(
-                third.dh.x.toByteArray(Charsets.UTF_8),
-                third.dh.y.toByteArray(Charsets.UTF_8)
+                third.dh.x.toByteArray(),
+                third.dh.y.toByteArray()
             ).pointPairToHex().hexToPublicKey()
 
             // shared secret key 생성

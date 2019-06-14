@@ -4,6 +4,7 @@ import org.spongycastle.asn1.pkcs.PrivateKeyInfo
 import org.spongycastle.cert.X509CertificateHolder
 import org.spongycastle.cert.jcajce.JcaX509CertificateConverter
 import org.spongycastle.jce.interfaces.ECPrivateKey
+import org.spongycastle.jce.provider.BouncyCastleProvider
 import org.spongycastle.openssl.PEMParser
 import org.spongycastle.openssl.PKCS8Generator
 import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter
@@ -15,6 +16,7 @@ import java.io.StringReader
 import java.io.StringWriter
 import java.security.PrivateKey
 import java.security.SecureRandom
+import java.security.Security
 import java.security.cert.X509Certificate
 
 enum class PemType(val value: String) {
@@ -54,6 +56,7 @@ fun PrivateKey.toPemString(password: String): String {
 
 fun String.toX509Cert(): X509Certificate? {
     if (this.trim().isNotEmpty()) {
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
         val pemParser = PEMParser(StringReader(this))
         val pemObject = pemParser.readObject()
         val converter = JcaX509CertificateConverter().setProvider("SC")
