@@ -45,8 +45,4 @@ data class MsgSsig constructor(
         this.header.sender = signer.id
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
-
-    override fun toString(): String {
-        return header.toString() + "\n" + String(serialize())
-    }
 }

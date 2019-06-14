@@ -29,8 +29,4 @@ data class MsgSetupMerger constructor(
         this.header.worldId = prefHelper.worldId
         this.header.chainId = prefHelper.chainId
     }
-
-    override fun toString(): String {
-        return header.toString() + "\n" + String(serialize())
-    }
 }

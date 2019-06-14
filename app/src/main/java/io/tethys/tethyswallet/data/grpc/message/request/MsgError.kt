@@ -37,8 +37,4 @@ data class MsgError constructor(
         this.header.sender = sender
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
-
-    override fun toString(): String {
-        return header.toString() + "\n" + String(serialize())
-    }
 }

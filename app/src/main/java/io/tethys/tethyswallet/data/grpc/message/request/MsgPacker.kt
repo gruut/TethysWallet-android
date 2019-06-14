@@ -29,7 +29,6 @@ abstract class MsgPacker {
         }
     }
 
-
     fun ByteArray.generateHmac(key: ByteArray): ByteArray? =
         when (header.macType) {
             TypeMac.HMAC -> HmacHelper.getHmacSignature(key, this)
@@ -46,5 +45,9 @@ abstract class MsgPacker {
             .newBuilder()
             .setMessage(ByteString.copyFrom(toByteArray(sharedSecretKey)))
             .build()
+    }
+
+    override fun toString(): String {
+        return header.toString() + "\n" + String(ObjectMapper().writeValueAsBytes(this@MsgPacker))
     }
 }

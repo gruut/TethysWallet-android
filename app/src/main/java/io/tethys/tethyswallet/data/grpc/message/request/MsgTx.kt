@@ -81,10 +81,6 @@ data class MsgTx constructor(
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
 
-    override fun toString(): String {
-        return header.toString() + "\n" + String(serialize())
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

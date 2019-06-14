@@ -36,8 +36,4 @@ data class MsgSuccess constructor(
         this.header.sender = user
         this.header.totalLength = TethysConfigs.HEADER_LENGTH + serialize().size
     }
-
-    override fun toString(): String {
-        return header.toString() + "\n" + String(serialize())
-    }
 }
