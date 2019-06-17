@@ -150,8 +150,8 @@ class MergerService : DaggerService() {
                 keyStoreHelper.signWithECKey(
                     this.mergerNonce.fromBase64() +
                             nonce.fromBase64() +
-                            point.first.toByteArray().encodeHex() +
-                            point.second.toByteArray().encodeHex() +
+                            point.first.toByteArray().decodeHex() +
+                            point.second.toByteArray().decodeHex() +
                             time.longBytes()
                 )
             ) { cert, signature ->
