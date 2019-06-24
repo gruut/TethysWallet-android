@@ -9,7 +9,7 @@
     <string name="join">Join</string>
 
     <string name="name">Name</string>
-    <string name="birth_date">Birth Date</string>
+    <string name="birth_date">Birth Date (800101)</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="isc_type">Type of industrial standard code</string>
     <string name="isc_code">Industrial standard ode</string>
