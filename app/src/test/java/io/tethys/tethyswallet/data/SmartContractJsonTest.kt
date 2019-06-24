@@ -51,7 +51,7 @@ class SmartContractJsonTest {
 
         val msgTx = MsgTx(
             txid,
-            time,
+            time.toString(),
             world,
             chain,
             MsgTx.TxBody(

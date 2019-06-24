@@ -28,7 +28,13 @@ class MsgPackerTest {
         val world = "TETHYS"
         val chain = "TSTCHAIN"
         val msg =
-            MsgJoin(time, world, chain, user.encodeToBase58String(), merger.encodeToBase58String())
+            MsgJoin(
+                time.toString(),
+                world,
+                chain,
+                user.encodeToBase58String(),
+                merger.encodeToBase58String()
+            )
 
         val json = msg.serialize()
     }
@@ -37,7 +43,7 @@ class MsgPackerTest {
     fun enumParseTest() {
         val user = "user".toSha256()
         val msg = MsgSuccess(
-            getTimestamp(),
+            getTimestamp().toString(),
             user.encodeToBase58String(),
             TypeMode.SIGNER.mode,
             true
