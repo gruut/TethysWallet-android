@@ -34,7 +34,7 @@ class GrpcService constructor(
                     Timber.d(
                         "[%s] %s",
                         this.status.toString(),
-                        MsgUnpacker(this.message.toByteArray())
+                        msg.header.msgType.toString()
                     )
                     when (this.status) {
                         Reply.Status.SUCCESS -> this.message.toByteArray()
