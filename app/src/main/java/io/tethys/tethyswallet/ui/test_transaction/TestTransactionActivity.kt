@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import io.tethys.tethyswallet.R
 import io.tethys.tethyswallet.databinding.ActivityTestTransactionBinding
+import io.tethys.tethyswallet.service.TestTransactionService
 import io.tethys.tethyswallet.ui.NavigationController
 import io.tethys.tethyswallet.ui.common.activity.BaseActivity
+import kotlinx.android.synthetic.main.activity_test_transaction.*
 import javax.inject.Inject
 
 class TestTransactionActivity : BaseActivity() {
@@ -26,6 +28,10 @@ class TestTransactionActivity : BaseActivity() {
         supportActionBar?.setTitle(R.string.nav_item_test_transaction)
 
         setContentView(R.layout.activity_test_transaction)
+
+        sendTransactionButton.setOnClickListener {
+            TestTransactionService.send()
+        }
     }
 
     companion object {
