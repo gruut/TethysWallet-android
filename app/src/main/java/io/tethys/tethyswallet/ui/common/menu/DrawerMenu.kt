@@ -14,6 +14,7 @@ import io.tethys.tethyswallet.ui.NavigationController
 import io.tethys.tethyswallet.ui.join.JoinActivity
 import io.tethys.tethyswallet.ui.main.MainActivity
 import io.tethys.tethyswallet.ui.merger.MergerActivity
+import io.tethys.tethyswallet.ui.test_transaction.TestTransactionActivity
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -99,6 +100,9 @@ class DrawerMenu @Inject constructor(
         }),
         SIGNER(R.id.nav_item_signer, Unit::class, {
             navigateToSignerActivity()
+        }),
+        TEST_TRANSACTION(R.id.nav_item_test_transaction, TestTransactionActivity::class, {
+            navigateToTestTransactionActivity()
         }),
         AUTONYM(R.id.nav_item_autonym, JoinActivity::class, {
             navigateToJoinFromDrawer()

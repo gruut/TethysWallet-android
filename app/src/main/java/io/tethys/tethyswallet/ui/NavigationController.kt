@@ -1,5 +1,6 @@
 package io.tethys.tethyswallet.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -13,6 +14,7 @@ import io.tethys.tethyswallet.ui.merger.MergerActivity
 import io.tethys.tethyswallet.ui.merger.MergerFragment
 import io.tethys.tethyswallet.ui.signer.SignerActivity
 import io.tethys.tethyswallet.ui.signer.SignerFragment
+import io.tethys.tethyswallet.ui.test_transaction.TestTransactionActivity
 import javax.inject.Inject
 
 class NavigationController @Inject constructor(
@@ -39,6 +41,10 @@ class NavigationController @Inject constructor(
 
     fun navigateToSignerActivity() {
         SignerActivity.start(activity)
+    }
+
+    fun navigateToTestTransactionActivity() {
+        TestTransactionActivity.start(activity)
     }
 
     private fun replaceFragment(fragment: Fragment) {

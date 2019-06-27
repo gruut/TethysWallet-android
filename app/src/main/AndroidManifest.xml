@@ -32,6 +32,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.tethys.tethyswallet.ui.main.MainActivity" />
         </activity>
+        <activity android:name=".ui.test_transaction.TestTransactionActivity"
+                  android:launchMode="singleTop"
+                  android:parentActivityName=".ui.main.MainActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="io.tethys.tethyswallet.ui.main.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTop" />

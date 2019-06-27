@@ -28,6 +28,7 @@
 
     <string name="nav_item_merger">Merger Setup</string>
     <string name="nav_item_signer">Signer Setup</string>
+    <string name="nav_item_test_transaction">Test Transaction</string>
     <string name="nav_item_home">Home</string>
     <string name="ip_address">IP address</string>
     <string name="port_number">Port Number</string>

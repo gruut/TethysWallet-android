@@ -23,7 +23,8 @@ import javax.inject.Singleton
         MainActivityBuilder::class,
         MergerActivityBuilder::class,
         SignerActivityBuilder::class,
-        MergerServiceBuilder::class
+        MergerServiceBuilder::class,
+        TestTransactionActivityBuilder::class
     ]
 )
 interface AppComponent : AndroidInjector<BaseApp> {
