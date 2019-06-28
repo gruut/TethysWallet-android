@@ -16,26 +16,55 @@
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     style="@style/Toolbar"
-                    android:theme="@style/AppTheme.AppBarOverlay" tools:visibility="visible"/>
+                    android:theme="@style/AppTheme.AppBarOverlay" tools:visibility="visible">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/toolbarTitle"
+                        android:textSize="20sp"
+                        android:text="@string/test_transaction" tools:layout_editor_absoluteY="14dp"
+                        tools:layout_editor_absoluteX="206dp" android:textColor="#FFFFFF"/>
+            </androidx.appcompat.widget.Toolbar>
 
-            <androidx.constraintlayout.widget.ConstraintLayout style="@style/ContentFrameLayout">
+            <androidx.constraintlayout.widget.ConstraintLayout style="@style/ContentFrameLayout"
+                                                               tools:layout_editor_absoluteY="56dp">
 
                 <Button
                         android:text="Send"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content" android:id="@+id/sendTransactionButton"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.03"
-                        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView"
-                        android:layout_marginStart="26dp" android:textSize="24sp"/>
-                <TextView
-                        android:text="Send a transaction"
-                        android:layout_width="wrap_content"
+                        app:layout_constraintHorizontal_bias="0.454"
+                        android:layout_marginStart="24dp" android:textSize="24sp" android:layout_marginBottom="72dp"
+                        android:layout_marginEnd="24dp"/>
+                <EditText
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView" android:layout_marginTop="16dp"
-                        app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="26dp" app:autoSizeTextType="uniform" android:textSize="30sp"/>
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintEnd_toEndOf="parent" android:id="@+id/ipTextView"
+                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
+                        android:hint="@string/ip_address"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/portTextView"
+                        app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="32dp"
+                        android:importantForAutofill="no" android:singleLine="true"
+                        android:textAppearance="@style/AppTheme.TitleBarTextColor" android:digits="0123456789."
+                        android:maxLines="1" style="@style/Widget.AppCompat.AutoCompleteTextView"/>
+                <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintEnd_toEndOf="parent" android:id="@+id/portTextView"
+                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
+                        android:hint="@string/port_number" android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/ipTextView" android:autofillHints=""
+                        android:maxLines="1"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

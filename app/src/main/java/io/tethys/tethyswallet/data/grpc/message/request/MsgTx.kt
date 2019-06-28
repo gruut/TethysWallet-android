@@ -30,7 +30,7 @@ data class MsgTx constructor(
         @get:JsonProperty("receiver") // __BASE58_256__
         val receiver: String?,
         @get:JsonProperty("fee") // __DECIMAL__
-        val fee: Int,
+        val fee: String,
         @get:JsonProperty("input")
         val input: Array<StandardContractInput>
     ) {

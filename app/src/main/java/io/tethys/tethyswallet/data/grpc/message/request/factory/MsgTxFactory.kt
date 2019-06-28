@@ -3,10 +3,7 @@ package io.tethys.tethyswallet.data.grpc.message.request.factory
 import io.tethys.tethyswallet.data.grpc.message.request.MsgTx
 import io.tethys.tethyswallet.data.tethys.contracts.NonAnonymUserJoin
 import io.tethys.tethyswallet.ui.BaseApp
-import io.tethys.tethyswallet.utils.ext.decodeBase58
-import io.tethys.tethyswallet.utils.ext.getTimestamp
-import io.tethys.tethyswallet.utils.ext.longBytes
-import io.tethys.tethyswallet.utils.ext.toSha256Hex
+import io.tethys.tethyswallet.utils.ext.*
 
 class MsgTxFactory {
     companion object {
@@ -32,7 +29,7 @@ class MsgTxFactory {
                     time.longBytes() +
                     fee.longBytes() +
                     input.getContractId().toByteArray() +
-                    input.toCBOR()).toSha256Hex()
+                    input.toCBOR()).toSha256().encodeToBase58String()
 
             val msgTx = MsgTx(
                 txid,
@@ -41,14 +38,14 @@ class MsgTxFactory {
                 chain,
                 MsgTx.TxBody(
                     input.getContractId(),
-                    null,
-                    fee,
+                    "5g9CMGLSXbNAKJMbWqBNp7rm78BJCMKhLzZVukBNGHSF",
+                    fee.toString(),
                     arrayOf(input)
                 ),
                 MsgTx.User(
                     BaseApp.prefHelper.commonName!!,
                     null, // 실명 사용자일 경우, null
-                    "user signature"
+                    "user signature".toByteArray().toBase64()
                 ),
                 arrayOf()
             )

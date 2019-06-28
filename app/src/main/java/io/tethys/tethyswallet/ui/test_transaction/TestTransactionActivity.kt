@@ -10,27 +10,31 @@ import io.tethys.tethyswallet.service.TestTransactionService
 import io.tethys.tethyswallet.ui.NavigationController
 import io.tethys.tethyswallet.ui.common.activity.BaseActivity
 import kotlinx.android.synthetic.main.activity_test_transaction.*
+import kotlinx.android.synthetic.main.activity_test_transaction.view.*
 import javax.inject.Inject
 
 class TestTransactionActivity : BaseActivity() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private val binding: ActivityTestTransactionBinding by lazy {
-        DataBindingUtil
-            .setContentView<ActivityTestTransactionBinding>(this, R.layout.activity_test_transaction)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.nav_item_test_transaction)
+
 
         setContentView(R.layout.activity_test_transaction)
 
         sendTransactionButton.setOnClickListener {
-            TestTransactionService.send()
+            val ipAddress = ipTextView.text.toString()
+            if (ipAddress.isEmpty()) {
+                ipTextView.setError("A IP address is required!")
+            }
+
+            val port = portTextView.text.toString()
+            if (port.isEmpty()) {
+                ipTextView.setError("A Port number is required!")
+            }
+
+            TestTransactionService.send(ipAddress, port)
         }
     }
 
