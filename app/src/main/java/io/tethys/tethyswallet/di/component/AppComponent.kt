@@ -24,6 +24,7 @@ import javax.inject.Singleton
         MergerActivityBuilder::class,
         SignerActivityBuilder::class,
         MergerServiceBuilder::class,
+        MessageSenderServiceBuilder::class,
         TestTransactionActivityBuilder::class
     ]
 )
