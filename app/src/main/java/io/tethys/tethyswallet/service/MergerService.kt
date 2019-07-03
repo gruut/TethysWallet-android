@@ -79,7 +79,9 @@ class MergerService : DaggerService() {
             TethysConfigs.TEST_WORLD_ID,
             TethysConfigs.TEST_CHAIN_ID,
             prefHelper.commonName!!,
-            "" // TODO: Set merger's id based on data from TRACKER
+            // TODO: Set merger's id based on data from TRACKER
+            // Assign the arbitrary id on merger_id
+            "5g9CMGLSXbNAKJMbWqBNp7rm78BJCMKhLzZVukBNGHSF"
         )
 
         grpcService.keyExService(msgJoin)
