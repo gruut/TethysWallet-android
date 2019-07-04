@@ -68,13 +68,15 @@ class GrpcService constructor(
                 .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.SECONDS)
                 .keyExService(msg.toGrpcMsg())
                 .run {
-                    Timber.d(
-                        "[%s] %s",
-                        this.status.toString(),
-                        MsgUnpacker(this.message.toByteArray())
-                    )
                     when (this.status) {
-                        Reply.Status.SUCCESS -> this.message.toByteArray()
+                        Reply.Status.SUCCESS -> {
+                            Timber.d(
+                                "[%s] %s",
+                                this.status.toString(),
+                                MsgUnpacker(this.message.toByteArray())
+                            )
+                            this.message.toByteArray()
+                        }
                         else -> throw Exception("Error Message From Merger: [${this.status.name}] ${this.errInfo}")
                     }
                 }
